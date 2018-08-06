@@ -7,7 +7,7 @@ const googlePlayApp = require('google-play-scraper');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-let appToScrape = '';
+let appToScrape = 'com.mojang.minecraftpe';
 
 /**
  * Using the appToScrape variable as the appId,
@@ -17,10 +17,15 @@ let appToScrape = '';
 app.get('/gplay', (req, res) => {
     console.log('==================== /gPlay ====================');
     const gPlayResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
+    const gpReviews = googlePlayApp.reviews({appId: appToScrape});
 
-    gPlayResults.then(function (result) {
-        res.send({
-            appObject: result
+    gPlayResults.then(function (data) {
+        gpReviews.then(function (reviews) {
+            console.log(reviews);
+            res.send({
+                appObject: data,
+                reviewsObject: reviews
+            })
         })
     });
 });
@@ -36,8 +41,3 @@ app.post('/', (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
-
-
-
-
-// com.mojang.minecraftpe
