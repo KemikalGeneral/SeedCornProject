@@ -1,17 +1,20 @@
 import React, {Component} from 'react';
 import './App.css';
+import Review from './Components/Review';
 
 export default class App extends Component {
     state = {
-        appObject: {}
+        appObject: {},
+        reviewsObject: [{}]
     };
 
-    // When the component mounts, callApi() is called and returns the appObject
-    // The returned appObject is then assigned to the client's appObject under a promise
+    // When the component mounts, callApi() is called and returns the appObject and the reviewsObject.
+    // The returned objects are then assigned to the client's appObject under a promise.
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({
-                appObject: res.appObject
+                appObject: res.appObject,
+                reviewsObject: res.reviewsObject
             }))
             .catch(err => console.log('Error: ', err));
     }
@@ -39,21 +42,25 @@ export default class App extends Component {
                     <input type="submit" value="Search"/>
                 </form>
 
-                <p>title: {this.state.appObject.title}.</p>
-                <p>contentRatingDescription: {this.state.appObject.contentRatingDescription}.</p>
-                <p>description: {this.state.appObject.description}.</p>
-                <p>developer: {this.state.appObject.developer}.</p>
-                <p>familyGenre: {this.state.appObject.familyGenre}.</p>
-                <p>genre: {this.state.appObject.genre}.</p>
-                <p>headerImage: {this.state.appObject.headerImage}.</p>
-                <p>icon: {this.state.appObject.icon}.</p>
-                <p>installs: {this.state.appObject.installs}.</p>
-                <p>price: {this.state.appObject.price}.</p>
-                <p>priceText: {this.state.appObject.priceText}.</p>
-                <p>ratings: {this.state.appObject.ratings}.</p>
-                <p>released: {this.state.appObject.released}.</p>
-                <p>reviews: {this.state.appObject.reviews}.</p>
-                <p>score: {this.state.appObject.score}.</p>
+                {/*App details*/}
+                <p>title: <span>{this.state.appObject.title}</span></p>
+                <p>contentRatingDescription: <span>{this.state.appObject.contentRatingDescription}</span></p>
+                <p>description: <span>{this.state.appObject.description}</span></p>
+                <p>developer: <span>{this.state.appObject.developer}</span></p>
+                <p>familyGenre: <span>{this.state.appObject.familyGenre}</span></p>
+                <p>genre: <span>{this.state.appObject.genre}</span></p>
+                <p>headerImage: <span>{this.state.appObject.headerImage}</span></p>
+                <p>icon: <span>{this.state.appObject.icon}</span></p>
+                <p>installs: <span>{this.state.appObject.installs}</span></p>
+                <p>price: <span>{this.state.appObject.price}</span></p>
+                <p>priceText: <span>{this.state.appObject.priceText}</span></p>
+                <p>ratings: <span>{this.state.appObject.ratings}</span></p>
+                <p>released: <span>{this.state.appObject.released}</span></p>
+                <p>reviews: <span>{this.state.appObject.reviews}</span></p>
+                <p>score: <span>{this.state.appObject.score}</span></p>
+
+                {/*Review details*/}
+                <Review reviewData={this.state.reviewsObject} />
 
             </div>
         );
