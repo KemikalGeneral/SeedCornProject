@@ -1,0 +1,25 @@
+.reviewsContainer {
+    padding-right:  16px;
+}
+
+.individualReviewContainer {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    border-radius: 8px;
+    box-shadow: 0 8px 8px lightgrey;
+    padding: 16px;
+}
+
+.reviewHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.reviewHeader p {
+    color: lightgray;
+}
+
+.reviewHeader p:last-child {
+    text-align: right;
+}

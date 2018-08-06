@@ -36,31 +36,59 @@ export default class App extends Component {
         return (
             <div className="App">
 
-                {/*Form to submit the app name*/}
-                <form action="/" method="post">
-                    <input type="text" name="appToSearch" />
-                    <input type="submit" value="Search"/>
-                </form>
-
                 {/*App details*/}
-                <p>title: <span>{this.state.appObject.title}</span></p>
-                <p>contentRatingDescription: <span>{this.state.appObject.contentRatingDescription}</span></p>
-                <p>description: <span>{this.state.appObject.description}</span></p>
-                <p>developer: <span>{this.state.appObject.developer}</span></p>
-                <p>familyGenre: <span>{this.state.appObject.familyGenre}</span></p>
-                <p>genre: <span>{this.state.appObject.genre}</span></p>
-                <p>headerImage: <span>{this.state.appObject.headerImage}</span></p>
-                <p>icon: <span>{this.state.appObject.icon}</span></p>
-                <p>installs: <span>{this.state.appObject.installs}</span></p>
-                <p>price: <span>{this.state.appObject.price}</span></p>
-                <p>priceText: <span>{this.state.appObject.priceText}</span></p>
-                <p>ratings: <span>{this.state.appObject.ratings}</span></p>
-                <p>released: <span>{this.state.appObject.released}</span></p>
-                <p>reviews: <span>{this.state.appObject.reviews}</span></p>
-                <p>score: <span>{this.state.appObject.score}</span></p>
+                <div className="appDetailsContainer">
+                    <div className="appHeader">
+
+                        <img src={this.state.appObject.icon}
+                             alt="image"
+                             width="300"
+                             height="300"
+                        />
+
+                        <div className="appHeaderElements">
+                            {/*Title and developer*/}
+                            <div>
+                                <p className="appTitle">{this.state.appObject.title}</p>
+                                <p className="appDeveloper">{this.state.appObject.developer}</p>
+                            </div>
+
+                            {/*Price, downloads, and ratings*/}
+                            <p>
+                                <p>{this.state.appObject.priceText}</p>
+                                <p>{this.state.appObject.installs} downloads</p>
+                                <p>{this.state.appObject.score} stars from &nbsp;
+                                    {this.state.appObject.ratings} ratings</p>
+                            </p>
+
+                            {/*Genre*/}
+                            <p>
+                                {this.state.appObject.genre} in &nbsp;
+                                {this.state.appObject.familyGenre} &nbsp;
+                                ({this.state.appObject.contentRatingDescription})
+                            </p>
+                        </div>
+                    </div>
+
+                    <p className="appDescription">{this.state.appObject.description}</p>
+
+                    <p>First released: {this.state.appObject.released}</p>
+
+                    <p>Total Number of Reviews: {this.state.appObject.reviews}</p>
+                </div>
 
                 {/*Review details*/}
-                <Review reviewData={this.state.reviewsObject} />
+                <div className="appReviewsContainer">
+                    {/*Form to submit the app name*/}
+                    <div className="form">
+                        <form action="/" method="post">
+                            <input type="text" name="appToSearch"/>
+                            <input type="submit" value="Go"/>
+                        </form>
+                    </div>
+
+                    <Review reviewData={this.state.reviewsObject}/>
+                </div>
 
             </div>
         );
