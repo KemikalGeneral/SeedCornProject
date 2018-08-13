@@ -6,7 +6,7 @@
 
     "clientw": "cd client && npm run start",
     "serverw": "nodemon server.js",
-    "devw": "concurrently --kill-others-on-fail \"npm run serverw\" \"npm run clientw\"",
+    "dev-w": "concurrently --kill-others-on-fail \"npm run serverw\" \"npm run clientw\"",
 
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
