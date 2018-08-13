@@ -2,7 +2,7 @@
 
 To start the app on Windows:
 
-- npm run dev1
+- npm run dev-w
 
 To start the app on Mac:
 
