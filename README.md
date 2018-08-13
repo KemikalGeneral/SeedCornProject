@@ -1,8 +1,12 @@
 # Seed Corn Project
 
-To start the app:
+To start the app on Windows:
 
-- npm run dev
+- npm run dev1
+
+To start the app on Mac:
+
+- yarn start
 
 ===============================================================================
 
