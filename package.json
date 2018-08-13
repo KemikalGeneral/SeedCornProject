@@ -3,15 +3,12 @@
   "version": "0.1.0",
   "proxy": "http://localhost:5000/",
   "scripts": {
-
     "clientw": "cd client && npm run start",
     "serverw": "nodemon server.js",
     "dev-w": "concurrently --kill-others-on-fail \"npm run serverw\" \"npm run clientw\"",
-
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -22,7 +19,8 @@
     "google-play-scraper": "^6.1.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "sqlite3": "^4.0.2"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
