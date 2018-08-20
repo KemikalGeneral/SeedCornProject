@@ -1,5 +1,3 @@
-"use strict";
-
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -27,17 +25,19 @@ app.get('/gplay', (req, res) => {
     const gPlayResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
     const gpReviews = googlePlayApp.reviews({appId: appToScrape});
 
-    gPlayResults.then(function (data) {
+    gPlayResults.then(function (appData) {
         gpReviews.then(function (reviews) {
-            // console.log(reviews);
+            // console.log('Reviews: ', reviews);
+            // console.log('App data: ', appData);
             res.send({
-                appObject: data,
+                appObject: appData,
                 reviewsObject: reviews
             });
 
-            dbHelper.insert();
-            dbHelper.each();
-            dbHelper.all();
+            console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
+            dbHelper.insertNewAppAndReview(appData.title, 'review text');
+            dbHelper.findAll();
+            dbHelper.findOne();
             // dbHelper.close();
         })
     });
