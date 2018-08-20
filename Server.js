@@ -35,10 +35,13 @@ app.get('/gplay', (req, res) => {
             });
 
             console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
-            dbHelper.insertNewAppAndReview(appData.title, 'review text');
+            dbHelper.insertNewAppAndReview(
+                //App data
+                appData.title, appData.developer, appData.size, appData.version,
+                // Review data - need to be mapped as will come as part of an array
+                'review text', 'score', 'date');
             dbHelper.findAll();
             dbHelper.findOne();
-            // dbHelper.close();
         })
     });
 });
