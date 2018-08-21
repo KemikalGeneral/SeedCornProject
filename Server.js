@@ -16,6 +16,8 @@ let appToScrape = 'com.mojang.minecraftpe';
  * Using the appToScrape variable as the appId,
  * search the Google Play Store for the requested app and return as a Promise.
  * Use a callback to get the data to pass back to the front end.
+ *
+ * Currently saved the required app and review data on load.
  */
 app.get('/gplay', (req, res) => {
     console.log('==================== /gPlay ====================');
