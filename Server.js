@@ -7,85 +7,45 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-let appToScrape = 'com.mojang.minecraftpe';
+const DatabaseHelper = require('./src/Database/DatabaseHelper').DatabaseHelper;
+const dbHelper = new DatabaseHelper();
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:', (err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Database connected');
-});
+let appToScrape = 'com.mojang.minecraftpe';
 
 /**
  * Using the appToScrape variable as the appId,
  * search the Google Play Store for the requested app and return as a Promise.
  * Use a callback to get the data to pass back to the front end.
+ *
+ * Currently saved the required app and review data on load.
  */
 app.get('/gplay', (req, res) => {
     console.log('==================== /gPlay ====================');
+    if (appToScrape.length < 1) {
+        appToScrape = 'com.mojang.minecraftpe';
+    }
     const gPlayResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
     const gpReviews = googlePlayApp.reviews({appId: appToScrape});
 
-    gPlayResults.then(function (data) {
+    gPlayResults.then(function (appData) {
         gpReviews.then(function (reviews) {
-            // console.log(reviews);
+            // console.log('Reviews: ', reviews);
+            // console.log('App data: ', appData);
             res.send({
-                appObject: data,
+                appObject: appData,
                 reviewsObject: reviews
-            })
-        })
-    });
-
-    //TODO split into helper functions
-    const db = new sqlite3.Database(':memory:', (err) => {
-        if (err) {
-            return console.error(err.message);
-        }
-        console.log('Database connected');
-    });
-
-    db.serialize(function () {
-        console.log('serialize!', db);
-
-        db.run("CREATE TABLE IF NOT EXISTS app (name TEXT)");
-
-        db.run("INSERT INTO app(name) VALUES(?), (?), (?)", ['1', '2', '3'], function(err) {
-            console.log('========== INSERT ==========');
-            if (err) {
-                return console.error(err.message);
-            }
-
-            console.log(`Row inserted: ${this.lastID}`);
-        });
-
-        db.each("SELECT * FROM app", (err, row) => {
-            console.log('========== EACH ==========');
-            if (err) {
-                throw err;
-            }
-
-            console.log(`Each row: ${row.name}`);
-        });
-
-        db.all("SELECT * FROM app", (err, rows) => {
-            console.log('========== ALL ==========');
-            console.log('All rows: ', rows);
-
-            rows.forEach((row) => {
-                console.log('ForEachRow: ', row.name);
             });
-        });
 
-        db.close((err) => {
-            console.log('========== CLOSE ==========');
-            if (err) {
-                return console.error(err.message);
-            }
-            console.log('Closing database');
+            console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
+            dbHelper.insertNewAppAndReview(
+                //App data
+                appData.title, appData.developer, appData.size, appData.version,
+                // Review data - need to be mapped as will come as part of an array
+                'review text', 'score', 'date');
+            dbHelper.findAll();
+            dbHelper.findOne();
         })
     });
-
 });
 
 /**
