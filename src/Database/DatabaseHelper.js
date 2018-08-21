@@ -76,7 +76,9 @@ class DatabaseHelper {
      */
     findAll() {
         // this.open();
-        db.all(`SELECT * FROM app join review on app.app_id = review.app_id`, (err, rows) => {
+        db.all(`SELECT *
+                FROM app
+                       join review on app.app_id = review.app_id`, (err, rows) => {
             console.log('\n========== FindAll ==========');
             console.log('All rows: \n', rows);
 
@@ -93,7 +95,10 @@ class DatabaseHelper {
      */
     findOne() {
         // this.open();
-        db.each(`SELECT * FROM app join review on app.App_id = review.app_id where app.app_id = 1`, (err, row) => {
+        db.each(`SELECT *
+                 FROM app
+                        join review on app.App_id = review.app_id
+                 where app.app_id = 1`, (err, row) => {
             console.log('\n========== FindOne ==========');
             console.log('Row: ', row);
             if (err) {
@@ -126,6 +131,10 @@ class DatabaseHelper {
     };
 }
 
+/**
+ * Table creation scripts...
+ */
+// App table
 const createAppTable = `create table IF NOT EXISTS app (
   app_id        integer primary key,
   app_name      varchar(100) not null,
@@ -134,6 +143,7 @@ const createAppTable = `create table IF NOT EXISTS app (
   app_version   integer      not null
 )`;
 
+// Review
 const createReviewTable = `create table IF NOT EXISTS review (
   review_id        integer primary key,
   review_text      text        not null,
@@ -142,6 +152,58 @@ const createReviewTable = `create table IF NOT EXISTS review (
   date_of_scraping date        not null default (datetime('now', 'localtime')),
   app_id           integer     not null,
   constraint FK_app_id foreign key (app_id) references app (app_id)
+)`;
+
+// Sentence Review
+const createSentenceReviewTable = `create table if not exists sentenceReview (
+  review_id integer primary key,
+  polarity  varchar(10) not null,
+  sentence  text        not null
+)`;
+
+// Swear Word
+const createSwearWordTable = `create table if not exists swearWord (
+  swear_word_id integer primary key,
+  swear_word    varchar(30) not null
+)`;
+
+// Swear Word - Sentence Review
+const createSwearWordsSentenceReviewTable = `create table if not exists swearWord_SentenceReview (
+  swearWord_SentenceReview_id integer primary key,
+  swear_word_id               integer not null,
+  review_id                   integer not null,
+  constraint FK_swear_word_id foreign key (swear_word_id) references swearWord (swear_word_id),
+  constraint FK_review_id foreign key (review_id) references sentenceReview (review_id)
+)`;
+
+// Rubric
+const createRubricTable = `create table if not exists rubric (
+  rubric_id   integer primary key,
+  rubric_name varchar(30) not null
+)`;
+
+// Rubric - Sentence Review
+const createRubricSentenceReviewTable = `create table if not exists rubric_SentenceReview (
+  rubric_SentenceReview_id integer primary key,
+  rubric_id                integer not null,
+  review_id                integer not null,
+  constraint FK_rubric_id foreign key (rubric_id) references rubric (rubric_id),
+  constraint FK_review_id foreign key (review_id) references sentenceReview (review_id)
+)`;
+
+// Topic
+const createTopicTable = `create table if not exists topic (
+  topic_id integer primary key,
+  topic    varchar(30) not null
+)`;
+
+// Topic - Sentence Review
+const createTopicSentenceReviewTable = `create table if not exists topic_SentenceReview (
+  topic_SentenceReview_id integer primary key,
+  topic_id                integer not null,
+  review_id               integer not null,
+  constraint FK_topic_id foreign key (topic_id) references topic (topic_id),
+  constraint FK_review_id foreign key (review_id) references sentenceReiew (review_id)
 )`;
 
 module.exports = {DatabaseHelper: DatabaseHelper};
