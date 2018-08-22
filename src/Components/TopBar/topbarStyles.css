@@ -1,6 +1,6 @@
 .topBar {
     display: grid;
-    grid-template-columns: 50% 1fr 1fr;
+    grid-template-columns: 50% auto auto 1fr;
 
     box-shadow: 8px 0 16px black;
     padding: 8px 32px;
@@ -19,14 +19,23 @@
     outline: none;
 }
 
+.topBar input::placeholder{
+    color: lightgrey;
+}
+
 .topBar input[type="text"] {
-    width: 85%;
+    width: calc(100% - 100px);
 }
 
 .topBar input[type="submit"] {
     background: white;
     border: 1px solid lightgrey;
     color: limegreen;
+    margin-right: 0;
+}
+
+.topBar .save input[type="submit"] {
+    width: 100%;
 }
 
 .topBar input[type="submit"]:hover {
@@ -39,4 +48,9 @@
 
 .topBar input[type="date"] {
     padding: 5px;
+    width: 175px;
+}
+
+.topBar input[type="number"] {
+    width: 175px;
 }
