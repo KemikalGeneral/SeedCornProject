@@ -1,0 +1,42 @@
+.topBar {
+    display: grid;
+    grid-template-columns: 50% 1fr 1fr;
+
+    box-shadow: 8px 0 16px black;
+    padding: 8px 32px;
+    text-align: left;
+}
+
+.topBar input {
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    margin-right: 8px;
+    padding: 8px;
+    transition: 0.25s;
+}
+
+.topBar input:focus {
+    outline: none;
+}
+
+.topBar input[type="text"] {
+    width: 85%;
+}
+
+.topBar input[type="submit"] {
+    background: white;
+    border: 1px solid lightgrey;
+    color: limegreen;
+}
+
+.topBar input[type="submit"]:hover {
+    background: limegreen;
+    border: 1px solid limegreen;
+    box-shadow: 0 4px 8px grey;
+    color: white;
+    transform: translateY(-2.5px);
+}
+
+.topBar input[type="date"] {
+    padding: 5px;
+}
