@@ -2,18 +2,18 @@ const sqlite3 = require('sqlite3').verbose();
 let db;
 
 /**
- * DatabaseHelper - Contains all the database call as functions.
+ * DatabaseHelper - Contains all the database calls as functions.
  * If needed, create a new instance of this class in the new file: e.g...
- * * const DatabaseHelper = require('./src/Database/DatabaseHelper').DatabaseHelper;
- * * const dbHelper = new DatabaseHelper();
- * * dbHelper.insert();
+ * * * const DatabaseHelper = require('./src/Database/DatabaseHelper').DatabaseHelper;
+ * * * const dbHelper = new DatabaseHelper();
+ * * * dbHelper.insert();
  * Table creation statements are at the bottom of this file.
  */
 class DatabaseHelper {
     /**
      * Constructor - Upon instantiating a DatabaseHelper class, this creates the tables in the callback.
      * There is the in :memory: version for testing, and the named file which will be created automatically,
-     * comment whichever is needed.
+     * comment in whichever is needed.
      */
     constructor() {
         console.log('Database constructor');
@@ -33,8 +33,8 @@ class DatabaseHelper {
     };
 
     /**
-     * insertNewAppAndReview - takes the app and associated review data and saves them to their respective tables.
-     * Used the row number of the inserted app (lastID) as the foreign key for the review's app_id.
+     * insertNewAppAndReview - takes the app and associated review data and saves it to their respective tables.
+     * Use the row number of the inserted app (lastID) as the foreign key for the review's app_id.
      * @param appName
      * @param appDeveloper
      * @param appSize
@@ -80,10 +80,13 @@ class DatabaseHelper {
                 FROM app
                        join review on app.app_id = review.app_id`, (err, rows) => {
             console.log('\n========== FindAll ==========');
-            console.log('All rows: \n', rows);
+            if (err) {
+                return console.error(err.message);
+            }
+            // console.log('All rows: \n', rows);
 
             rows.forEach((row) => {
-                console.log('ForEachRow: ', row);
+                // console.log('ForEachRow: ', row);
             });
         });
         // this.close();
@@ -100,7 +103,7 @@ class DatabaseHelper {
                         join review on app.App_id = review.app_id
                  where app.app_id = 1`, (err, row) => {
             console.log('\n========== FindOne ==========');
-            console.log('Row: ', row);
+            // console.log('Row: ', row);
             if (err) {
                 throw err;
             }

@@ -10,40 +10,31 @@ app.use(bodyParser.urlencoded({extended: false}));
 const DatabaseHelper = require('./src/Database/DatabaseHelper').DatabaseHelper;
 const dbHelper = new DatabaseHelper();
 
-let appToScrape = 'com.mojang.minecraftpe';
+let appToScrape = 'com.android.chrome';
+let returnedAppResults;
+let returnedReviewResults;
 
 /**
  * Using the appToScrape variable as the appId,
  * search the Google Play Store for the requested app and return as a Promise.
  * Use a callback to get the data to pass back to the front end.
- *
- * Currently saved the required app and review data on load.
  */
-app.get('/gplay', (req, res) => {
-    console.log('==================== /gPlay ====================');
+app.get('/index', (req, res) => {
+    console.log('==================== /index ====================');
     if (appToScrape.length < 1) {
-        appToScrape = 'com.mojang.minecraftpe';
+        appToScrape = 'com.android.chrome';
     }
-    const gPlayResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
-    const gpReviews = googlePlayApp.reviews({appId: appToScrape});
+    returnedAppResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
+    returnedReviewResults = googlePlayApp.reviews({appId: appToScrape});
 
-    gPlayResults.then(function (appData) {
-        gpReviews.then(function (reviews) {
-            // console.log('Reviews: ', reviews);
+    returnedAppResults.then(function (appData) {
+        returnedReviewResults.then(function (reviewData) {
+            // console.log('Reviews: ', reviewData);
             // console.log('App data: ', appData);
             res.send({
                 appObject: appData,
-                reviewsObject: reviews
+                reviewsObject: reviewData
             });
-
-            console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
-            dbHelper.insertNewAppAndReview(
-                //App data
-                appData.title, appData.developer, appData.size, appData.version,
-                // Review data - need to be mapped as will come as part of an array
-                'review text', 'score', 'date');
-            dbHelper.findAll();
-            dbHelper.findOne();
         })
     });
 });
@@ -52,10 +43,32 @@ app.get('/gplay', (req, res) => {
  * Assign the search request to the appToScrape variable.
  * Redirect to the main page for population.
  */
-app.post('/', (req, res) => {
+app.post('/search', (req, res) => {
+    console.log('==================== /search ====================');
     appToScrape = req.body.appToSearch;
 
-    res.redirect('/gplay');
+    res.redirect('/index');
+});
+
+/**
+ * Use the promise's callback from the search results to save the current app and associated reviews.
+ *
+ * Currently doesn't save reviews as the returned data needs mapping from its array.
+ */
+app.post('/save', (req, res) => {
+    console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
+    returnedAppResults.then(function (appData) {
+        returnedReviewResults.then(function (reviewData) {
+
+            dbHelper.insertNewAppAndReview(
+                //App data
+                appData.title, appData.developer, appData.size, appData.version,
+                // Review data - need to be mapped as will come as part of an array
+                'review text', 'score', 'date');
+            dbHelper.findAll();
+            dbHelper.findOne();
+        });
+    });
 });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
