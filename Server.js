@@ -24,6 +24,7 @@ app.get('/index', (req, res) => {
     if (appToScrape.length < 1) {
         appToScrape = 'com.android.chrome';
     }
+
     returnedAppResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
     returnedReviewResults = googlePlayApp.reviews({appId: appToScrape});
 
@@ -31,6 +32,9 @@ app.get('/index', (req, res) => {
         returnedReviewResults.then(function (reviewData) {
             // console.log('Reviews: ', reviewData);
             // console.log('App data: ', appData);
+
+            // dbHelper.findAll();
+
             res.send({
                 appObject: appData,
                 reviewsObject: reviewData
@@ -52,23 +56,43 @@ app.post('/search', (req, res) => {
 
 /**
  * Use the promise's callback from the search results to save the current app and associated reviews.
- *
- * Currently doesn't save reviews as the returned data needs mapping from its array.
  */
 app.post('/save', (req, res) => {
     console.log('========== ========== ========== ========== New Save ========== ========== ========== ==========');
-    returnedAppResults.then(function (appData) {
-        returnedReviewResults.then(function (reviewData) {
+    if (returnedAppResults == null) {
+        console.log('No app selected to save');
+        res.redirect('/index');
+    } else {
 
-            dbHelper.insertNewAppAndReview(
-                //App data
-                appData.title, appData.developer, appData.size, appData.version,
-                // Review data - need to be mapped as will come as part of an array
-                'review text', 'score', 'date');
-            dbHelper.findAll();
-            dbHelper.findOne();
+        returnedAppResults.then(function (appData) {
+            returnedReviewResults.then(function (reviewData) {
+
+                // Loop through the reviewData and create and array of reviews to save to the app
+                let allReviewsArray = [];
+
+                for (let review of reviewData) {
+                    let reviewArray = [];
+
+                    reviewArray.push(review.text);
+                    reviewArray.push(review.score);
+                    reviewArray.push(review.date);
+
+                    allReviewsArray.push(reviewArray);
+                }
+
+                // Save app and associated review data
+                dbHelper.insertNewAppAndReview(
+                    //App data
+                    appData.title, appData.developer, appData.size, appData.version,
+                    // Review data
+                    allReviewsArray
+                );
+
+                // Redirect back to the home screen
+                res.redirect('/index');
+            });
         });
-    });
+    }
 });
 
 app.listen(port, () => console.log(`Listening on port: ${port}`));
