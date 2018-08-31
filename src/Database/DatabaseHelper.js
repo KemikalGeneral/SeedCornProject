@@ -39,12 +39,10 @@ class DatabaseHelper {
      * @param appDeveloper
      * @param appSize
      * @param appVersion
-     * @param reviewText
-     * @param reviewScore
-     * @param reviewDate
+     * @param reviewsArray
      */
     insertNewAppAndReview(appName, appDeveloper, appSize, appVersion,
-                          reviewText, reviewScore, reviewDate) {
+                          reviewsArray) {
         // this.open();
 
         // Save app details
@@ -55,18 +53,22 @@ class DatabaseHelper {
                 if (err) {
                     return console.error(err.message);
                 }
-                console.log(`App saved: ${appName}`);
 
-                // Save review details
-                db.run(`INSERT INTO review (review_text, review_score, review_date, app_id)
-                        VALUES (?, ?, ?, ?)`, [reviewText, reviewScore, reviewDate, this.lastID],
-                    function (err) {
-                        console.log('\n========== INSERT - insertNewAppAndReview - review text ==========');
-                        if (err) {
-                            return console.error(err.message);
-                        }
-                        console.log(`Review saved: ${reviewText}`);
-                    });
+                // Loop through the reviewsArray and insert each review using the last inserted app_id
+                for (let review of reviewsArray) {
+                    // Save review details
+                    db.run(`INSERT INTO review (review_text, review_score, review_date, app_id)
+                            VALUES (?, ?, ?, ?)`, [review[0], review[1], review[2], this.lastID],
+                        function (err) {
+                            console.log('\n========== INSERT - insertNewAppAndReview - review text ==========');
+                            if (err) {
+                                return console.error(err.message);
+                            }
+                            // console.log(`Review saved: ${reviewText}`);
+                        });
+                }
+
+                console.log(`App saved: ${appName}`);
             });
         // this.close();
     };
@@ -78,12 +80,12 @@ class DatabaseHelper {
         // this.open();
         db.all(`SELECT *
                 FROM app
-                       join review on app.app_id = review.app_id`, (err, rows) => {
+                       JOIN review ON app.app_id = review.app_id`, (err, rows) => {
             console.log('\n========== FindAll ==========');
             if (err) {
                 return console.error(err.message);
             }
-            // console.log('All rows: \n', rows);
+            console.log('All rows: \n', rows);
 
             rows.forEach((row) => {
                 // console.log('ForEachRow: ', row);
