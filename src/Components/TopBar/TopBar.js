@@ -6,7 +6,8 @@ export default class TopBar extends Component {
         super(props);
 
         this.state = {
-            value: ''
+            textInputValue: '',
+            isUrlValid: true
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -14,7 +15,7 @@ export default class TopBar extends Component {
 
     handleChange(event) {
         this.setState({
-            value: event.target.value
+            textInputValue: event.target.value
         });
     }
 
@@ -45,12 +46,15 @@ export default class TopBar extends Component {
                 <form action="/search" method="post">
                     <input type="text"
                            name="appToSearch"
-                           value={this.state.value}
+                           value={this.state.textInputValue}
                            placeholder="Google Play Store app URL (e.g. https://play.google.com/store/apps/details?id=com.android.chrome)"
                            onChange={this.handleChange}/>
 
-                    {this.state.value.startsWith('https://play.google.com/store/apps/') ?
-                        <input type="submit" value="Search"/> : <input type="submit" value="Search" style={{color:'red'}} disabled={true}/>}
+                    {this.state.textInputValue.startsWith('https://play.google.com/store/apps/')
+                        ?
+                        <input type="submit" value="Search"/>
+                        :
+                        <input type="submit" value="Search" style={{color:'red'}} disabled={true}/>}
                 </form>
 
                 {/*Dates*/}

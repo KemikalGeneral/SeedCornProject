@@ -46,7 +46,7 @@ export default class App extends Component {
                         <div className="appHeader">
 
                             <img src={this.state.appObject.icon}
-                                 alt="image"
+                                 alt="App icon"
                                  width="300"
                                  height="300"
                             />
@@ -68,9 +68,9 @@ export default class App extends Component {
 
                                 {/*Genre*/}
                                 <p>
-                                    {this.state.appObject.genre} in &nbsp;
-                                    {this.state.appObject.familyGenre} &nbsp;
-                                    ({this.state.appObject.contentRatingDescription})
+                                    {this.state.appObject.genre}
+                                    {this.state.appObject.familyGenre}
+                                    {this.state.appObject.contentRatingDescription}
                                 </p>
                             </div>
                         </div>
