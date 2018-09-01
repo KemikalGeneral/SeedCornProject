@@ -21,9 +21,6 @@ let returnedReviewResults;
  */
 app.get('/index', (req, res) => {
     console.log('==================== /index ====================');
-    if (appToScrape.length < 1) {
-        appToScrape = 'com.android.chrome';
-    }
 
     returnedAppResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
     returnedReviewResults = googlePlayApp.reviews({appId: appToScrape});
@@ -44,12 +41,14 @@ app.get('/index', (req, res) => {
 });
 
 /**
- * Assign the search request to the appToScrape variable.
+ * Split the URL and assign the id search parameter to the appToScrape variable.
  * Redirect to the main page for population.
  */
 app.post('/search', (req, res) => {
     console.log('==================== /search ====================');
     appToScrape = req.body.appToSearch;
+    const splitName = appToScrape.split('id=');
+    appToScrape = splitName[1];
 
     res.redirect('/index');
 });
