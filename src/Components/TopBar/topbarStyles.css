@@ -54,3 +54,7 @@
 .topBar input[type="number"] {
     width: 175px;
 }
+
+.bad {
+    color: red;
+}

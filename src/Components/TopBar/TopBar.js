@@ -2,6 +2,22 @@ import React, {Component} from 'react';
 import './topbarStyles.css';
 
 export default class TopBar extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: ''
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({
+            value: event.target.value
+        });
+    }
+
     render() {
 
         // Return the current date to populate the date fields with
@@ -27,8 +43,14 @@ export default class TopBar extends Component {
 
                 {/*Search form*/}
                 <form action="/search" method="post">
-                    <input type="text" name="appToSearch" placeholder="Enter ID parameter from Google Play Store URL (e.g. com.android.chrome)"/>
-                    <input type="submit" value="Search"/>
+                    <input type="text"
+                           name="appToSearch"
+                           value={this.state.value}
+                           placeholder="Google Play Store app URL (e.g. https://play.google.com/store/apps/details?id=com.android.chrome)"
+                           onChange={this.handleChange}/>
+
+                    {this.state.value.startsWith('https://play.google.com/store/apps/') ?
+                        <input type="submit" value="Search"/> : <input type="submit" value="Search" style={{color:'red'}} disabled={true}/>}
                 </form>
 
                 {/*Dates*/}
