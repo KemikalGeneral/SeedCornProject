@@ -1,6 +1,7 @@
 .topBar {
     display: grid;
-    grid-template-columns: 50% auto auto 1fr;
+    /*grid-template-columns: 50% auto auto 1fr;*/
+    grid-template-columns: 50% 1fr;
 
     box-shadow: 8px 0 16px black;
     padding: 8px 32px;

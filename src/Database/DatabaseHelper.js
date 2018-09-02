@@ -67,7 +67,6 @@ class DatabaseHelper {
                             // console.log(`Review saved: ${reviewText}`);
                         });
                 }
-
                 console.log(`App saved: ${appName}`);
             });
         // this.close();
@@ -112,6 +111,24 @@ class DatabaseHelper {
         });
         // this.close();
     };
+
+    /**
+     * GetListOfAppNames - Returns a list of the names of apps stored in the database.
+     * Uses a 'complete' callback to pass back the names data.
+     * @param callback
+     */
+    getListOfAppNames(callback) {
+        let names = [];
+
+        db.each(`SELECT app_name FROM app`, (err, row) => {
+            if (err) {
+                console.error(err.message);
+            }
+            names.push(row);
+        }, function() {
+            callback(names);
+        });
+    }
 
     open() {
         // let db = new sqlite3.Database(':memory:');

@@ -58,20 +58,20 @@ export default class TopBar extends Component {
                 </form>
 
                 {/*Dates*/}
-                <div>
-                    From: <input type="date" id="dateFrom" max="2018-08-22" defaultValue={getDate()}/>
+                {/*<div>*/}
+                    {/*From: <input type="date" id="dateFrom" max="2018-08-22" defaultValue={getDate()}/>*/}
 
-                    To: <input type="date" id="dateTo" defaultValue="0001-01-01"/>
-                </div>
+                    {/*To: <input type="date" id="dateTo" defaultValue="0001-01-01"/>*/}
+                {/*</div>*/}
 
                 {/*Limit Review*/}
-                <div>
-                    Limit: <input type="number" id="limitReviews" step="10" min="0" defaultValue="40"/>
-                </div>
+                {/*<div>*/}
+                    {/*Limit: <input type="number" id="limitReviews" step="10" min="0" defaultValue="40"/>*/}
+                {/*</div>*/}
 
                 {/*Save reviews*/}
                 <form className="save" action="/save" method="post">
-                    <input type="submit" value="Save Reviews"/>
+                    <input type="submit" value="Save App and Reviews"/>
                 </form>
 
             </div>
