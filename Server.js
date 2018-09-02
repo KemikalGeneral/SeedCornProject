@@ -94,4 +94,14 @@ app.post('/save', (req, res) => {
     }
 });
 
+app.get('/names', (req, res) => {
+    dbHelper.getListOfAppNames(function (listOfNames) {
+        console.log('ListOfNames: ', listOfNames);
+
+        res.send({
+            appObject: listOfNames
+        });
+    });
+});
+
 app.listen(port, () => console.log(`Listening on port: ${port}`));
