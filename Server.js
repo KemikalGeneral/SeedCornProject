@@ -32,9 +32,14 @@ app.get('/index', (req, res) => {
 
             // dbHelper.findAll();
 
-            res.send({
-                appObject: appData,
-                reviewsObject: reviewData
+            dbHelper.getListOfAppNames(function (listOfNames) {
+                // console.log('ListOfNames: ', listOfNames);
+
+                res.send({
+                    appObject: appData,
+                    reviewsObject: reviewData,
+                    savedAppData: listOfNames
+                });
             });
         })
     });

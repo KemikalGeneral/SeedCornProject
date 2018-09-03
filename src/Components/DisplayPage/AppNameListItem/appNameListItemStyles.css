@@ -1,0 +1,11 @@
+.appNameListItemContainer {
+    padding: 8px;
+    transition: .25s;
+}
+
+.appNameListItemContainer:hover {
+    background: lightgrey;
+}
+
+.appNameListItemContainer p {
+}

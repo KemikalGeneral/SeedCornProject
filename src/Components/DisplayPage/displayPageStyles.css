@@ -1,0 +1,36 @@
+.displayPageContainer {
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    padding: 32px;
+}
+
+.displayPageContainer .sectionContainer {
+    border: 1px solid lightgrey;
+    border-radius: 16px;
+    margin: 16px;
+    padding: 16px;
+}
+
+.displayPageContainer input {
+    margin: 8px 0;
+}
+
+.displayPageContainer hr {
+    border: 0.5pt solid lightgrey;
+    margin: 16px;
+}
+
+.displayPageContainer .sectionContainer .sectionHeading {
+    font-size: 1.5em;
+    text-align: center
+}
+
+.displayPageContainer .formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.displayPageContainer .formRow p {
+    line-height: 44px;
+}
