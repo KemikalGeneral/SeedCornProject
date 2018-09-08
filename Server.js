@@ -21,9 +21,6 @@ let returnedReviewResults;
  */
 app.get('/index', (req, res) => {
     console.log('==================== /index ====================');
-    if (appToScrape.length < 1) {
-        appToScrape = 'com.android.chrome';
-    }
 
     returnedAppResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
     returnedReviewResults = googlePlayApp.reviews({appId: appToScrape});
@@ -35,21 +32,28 @@ app.get('/index', (req, res) => {
 
             // dbHelper.findAll();
 
-            res.send({
-                appObject: appData,
-                reviewsObject: reviewData
+            dbHelper.getListOfAppNames(function (listOfNames) {
+                // console.log('ListOfNames: ', listOfNames);
+
+                res.send({
+                    appData: appData,
+                    reviewData: reviewData,
+                    savedAppsNames: listOfNames
+                });
             });
         })
     });
 });
 
 /**
- * Assign the search request to the appToScrape variable.
+ * Split the URL and assign the id search parameter to the appToScrape variable.
  * Redirect to the main page for population.
  */
 app.post('/search', (req, res) => {
     console.log('==================== /search ====================');
     appToScrape = req.body.appToSearch;
+    const splitName = appToScrape.split('id=');
+    appToScrape = splitName[1];
 
     res.redirect('/index');
 });
@@ -95,4 +99,22 @@ app.post('/save', (req, res) => {
     }
 });
 
+/**
+ * Return a JSON of all saved app names
+ */
+app.get('/getAllSavedAppNames', (req, res) => {
+    dbHelper.getListOfAppNames(function (listOfNames) {
+        console.log('ListOfNames: ', listOfNames);
+
+        res.send({
+            savedAppsNames: listOfNames
+        });
+    });
+});
+
+app.post('/getReviewsFromAppName', (req, res) => {
+    console.log('getReviewsFromAppName', req.body.getReviewsFromAppName);
+});
+
+// Port listener
 app.listen(port, () => console.log(`Listening on port: ${port}`));

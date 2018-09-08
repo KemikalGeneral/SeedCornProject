@@ -1,52 +1,50 @@
 import React, {Component} from 'react';
 import './topbarStyles.css';
+import {Link} from "react-router-dom";
 
 export default class TopBar extends Component {
-    render() {
+    constructor(props) {
+        super(props);
 
-        // Return the current date to populate the date fields with
-        const getDate = () => {
-            const dateToday = new Date();
-            const dateDay = dateToday.getDate();
-            let dayToday = dateDay;
-            if (dateDay.toString().length < 2) {
-                dayToday = `0${dateDay}`;
-            }
-            const dateMonth = dateToday.getMonth() + 1;
-            let monthToday = dateMonth;
-            if (dateMonth.toString().length < 2) {
-                monthToday = `0${dateMonth}`;
-            }
-            const yearToday = dateToday.getFullYear();
-
-            return yearToday + '-' + monthToday + '-' + dayToday;
+        this.state = {
+            textInputValue: '',
+            isUrlValid: true
         };
 
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({
+            textInputValue: event.target.value
+        });
+    }
+
+    render() {
         return (
             <div className="topBar">
 
                 {/*Search form*/}
                 <form action="/search" method="post">
-                    <input type="text" name="appToSearch" placeholder="Enter ID parameter from Google Play Store URL (e.g. com.android.chrome)"/>
-                    <input type="submit" value="Search"/>
+                    <input type="text"
+                           name="appToSearch"
+                           value={this.state.textInputValue}
+                           placeholder="Google Play Store app URL (e.g. https://play.google.com/store/apps/details?id=com.android.chrome)"
+                           onChange={this.handleChange}/>
+
+                    {this.state.textInputValue.startsWith('https://play.google.com/store/apps/')
+                        ?
+                        <input type="submit" value="Search"/>
+                        :
+                        <input type="submit" value="Search" style={{color: 'red'}} disabled={true}/>}
                 </form>
-
-                {/*Dates*/}
-                <div>
-                    From: <input type="date" id="dateFrom" max="2018-08-22" defaultValue={getDate()}/>
-
-                    To: <input type="date" id="dateTo" defaultValue="0001-01-01"/>
-                </div>
-
-                {/*Limit Review*/}
-                <div>
-                    Limit: <input type="number" id="limitReviews" step="10" min="0" defaultValue="40"/>
-                </div>
 
                 {/*Save reviews*/}
                 <form className="save" action="/save" method="post">
-                    <input type="submit" value="Save Reviews"/>
+                    <input type="submit" value="Save App and Reviews"/>
                 </form>
+
+                <Link to="/displayPage" className="FAB">Go to Display</Link>
 
             </div>
         );
