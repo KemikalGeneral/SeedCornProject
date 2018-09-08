@@ -18,7 +18,7 @@ class DatabaseHelper {
     constructor() {
         console.log('Database constructor');
         // db = new sqlite3.Database(':memory:', (err) => {
-            db = new sqlite3.Database('./schema.db', (err) => {
+            db = new sqlite3.Database('./src/Database/schema.db', (err) => {
             console.log('\n========== CREATE ==========');
             if (err) {
                 return console.error(err.message);
