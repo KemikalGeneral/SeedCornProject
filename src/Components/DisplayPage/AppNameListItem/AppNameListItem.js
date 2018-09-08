@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import './appNameListItemStyles.css';
 
 export default class AppNameListItem extends Component {
+
+    handleClick = (event, name) => {
+        this.props.callbackFromParent(name);
+    };
+
     render() {
-
-        console.log('appNameProps: ', this.props.appNameData);
-
-        return(
+        return (
             <div>
 
                 {
@@ -14,16 +16,20 @@ export default class AppNameListItem extends Component {
                         return (
                             <div className="appNameListItemContainer">
 
-                                <p>{data.app_name}</p>
+                                <form action="/getReviewsFromAppName" method="post">
+                                    <input type="submit"
+                                           value={data.app_name}
+                                           name="getReviewsFromAppName"
+                                           onClick={(event) => this.handleClick(event, data.app_name)}
+                                    />
+                                </form>
 
                             </div>
                         )
-
                     })
                 }
 
             </div>
         );
-
     }
 }

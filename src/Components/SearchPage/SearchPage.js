@@ -5,24 +5,22 @@ import TopBar from './../TopBar/TopBar';
 
 export default class SearchPage extends Component {
     state = {
-        appObject: {},
-        reviewsObject: [{}],
-        savedAppData: [{}],
+        appData: {},
+        reviewData: [{}],
     };
 
-    // When the component mounts, callApi() is called and returns the appObject and the reviewsObject.
-    // The returned objects are then assigned to the client's appObject under a promise.
+    // When the component mounts, callApi() is called and returns the appData and the reviewData.
+    // The returned objects are then assigned to the client's appData under a promise.
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({
-                appObject: res.appObject,
-                reviewsObject: res.reviewsObject,
-                savedAppData: res.savedAppData,
+                appData: res.appData,
+                reviewData: res.reviewData,
             }))
             .catch(err => console.log('Error: ', err));
     }
 
-    // Called from component mounting, returns a JSON of the appObject
+    // Called from component mounting, returns a JSON of the appData
     callApi = async () => {
         const response = await fetch('/index');
         const body = await response.json();
@@ -47,7 +45,7 @@ export default class SearchPage extends Component {
                     <div className="appDetailsContainer">
                         <div className="appHeader">
 
-                            <img src={this.state.appObject.icon}
+                            <img src={this.state.appData.icon}
                                  alt="App icon"
                                  width="300"
                                  height="300"
@@ -56,37 +54,37 @@ export default class SearchPage extends Component {
                             <div className="appHeaderElements">
                                 {/*Title and developer*/}
                                 <div>
-                                    <p className="appTitle">{this.state.appObject.title}</p>
-                                    <p className="appDeveloper">{this.state.appObject.developer}</p>
+                                    <p className="appTitle">{this.state.appData.title}</p>
+                                    <p className="appDeveloper">{this.state.appData.developer}</p>
                                 </div>
 
                                 {/*Price, downloads, and ratings*/}
                                 <p>
-                                    <p>{this.state.appObject.priceText}</p>
-                                    <p>{this.state.appObject.installs} downloads</p>
-                                    <p>{this.state.appObject.score} stars from &nbsp;
-                                        {this.state.appObject.ratings} ratings</p>
+                                    <p>{this.state.appData.priceText}</p>
+                                    <p>{this.state.appData.installs} downloads</p>
+                                    <p>{this.state.appData.score} stars from &nbsp;
+                                        {this.state.appData.ratings} ratings</p>
                                 </p>
 
                                 {/*Genre*/}
                                 <p>
-                                    {this.state.appObject.genre}
-                                    {this.state.appObject.familyGenre}
-                                    {this.state.appObject.contentRatingDescription}
+                                    {this.state.appData.genre}
+                                    {this.state.appData.familyGenre}
+                                    {this.state.appData.contentRatingDescription}
                                 </p>
                             </div>
                         </div>
 
-                        <p className="appDescription">{this.state.appObject.description}</p>
+                        <p className="appDescription">{this.state.appData.description}</p>
 
-                        <p>First released: {this.state.appObject.released}</p>
+                        <p>First released: {this.state.appData.released}</p>
 
-                        <p>Total Number of Reviews: {this.state.appObject.reviews}</p>
+                        <p>Total Number of Reviews: {this.state.appData.reviews}</p>
                     </div>
 
                     {/*Review details*/}
                     <div className="appReviewsContainer">
-                        <Review reviewData={this.state.reviewsObject}/>
+                        <Review reviewData={this.state.reviewData}/>
                     </div>
 
                 </div>
