@@ -5,26 +5,23 @@ import AppNameListItem from './AppNameListItem/AppNameListItem';
 
 export default class App extends Component {
     state = {
-        appObject: {},
-        reviewsObject: [{}],
-        savedAppData: [{}],
+        savedAppsNames: [{}],
+        currentReview: [{}],
     };
 
-    // When the component mounts, callApi() is called and returns the appObject and the reviewsObject.
-    // The returned objects are then assigned to the client's appObject under a promise.
+    // When the component mounts, callApi() is called and returns the savedAppsNames.
+    // The returned objects are then assigned to the client's appData under a promise.
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({
-                appObject: res.appObject,
-                reviewsObject: res.reviewsObject,
-                savedAppData: res.savedAppData,
+                savedAppsNames: res.savedAppsNames,
             }))
             .catch(err => console.log('Error: ', err));
     }
 
-    // Called from component mounting, returns a JSON of the appObject
+    // Called from component mounting, returns a JSON of the appData
     callApi = async () => {
-        const response = await fetch('/index');
+        const response = await fetch('/getAllSavedAppNames');
         const body = await response.json();
 
         if (response.status !== 200) {
@@ -59,6 +56,15 @@ export default class App extends Component {
             {app_name: 'Dummy name 3'}
         ];
 
+    appNameCallback = (dataFromChild) => {
+        console.log('dateFromChild: ', dataFromChild);
+
+        fetch('/boo')
+            .then(res => this.setState({
+                currentReview: res.currentReview,
+            }));
+    };
+
     render() {
         return (
             <div>
@@ -68,6 +74,7 @@ export default class App extends Component {
 
                 <div className="displayPageContainer">
 
+                    {/*Config section*/}
                     <div className="sectionContainer">
                         <input type="submit" value="Show all saved apps"/>
 
@@ -103,15 +110,34 @@ export default class App extends Component {
                                 </div>
                             </div>
 
+                            <div>
+                                <input type="submit" value="Refine"/>
+                            </div>
+
                             <hr/>
 
-                            <input type="submit" value="Refine"/>
+                            <p className="sectionHeading">Sentiment Analysis</p>
+
+                            <div>
+                                <input type="submit" value="Run Sentiment Analysis"/>
+                            </div>
+
                         </form>
                     </div>
 
+                    {/*Apps section section*/}
                     <div className="sectionContainer">
-                        <AppNameListItem appNameData={this.dummyData}/>
-                        {/*<AppNameListItem appNameData={this.state.savedAppData}/>*/}
+                        {/*<AppNameListItem appNameData={this.dummyData}/>*/}
+
+                        <AppNameListItem
+                            appNameData={this.state.savedAppsNames}
+                            callbackFromParent={this.appNameCallback}
+                        />
+                    </div>
+
+                    {/*Reviews section*/}
+                    <div className="sectionContainer">
+                        <p>Review</p>
                     </div>
 
                 </div>

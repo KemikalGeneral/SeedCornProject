@@ -36,9 +36,9 @@ app.get('/index', (req, res) => {
                 // console.log('ListOfNames: ', listOfNames);
 
                 res.send({
-                    appObject: appData,
-                    reviewsObject: reviewData,
-                    savedAppData: listOfNames
+                    appData: appData,
+                    reviewData: reviewData,
+                    savedAppsNames: listOfNames
                 });
             });
         })
@@ -99,14 +99,22 @@ app.post('/save', (req, res) => {
     }
 });
 
-app.get('/names', (req, res) => {
+/**
+ * Return a JSON of all saved app names
+ */
+app.get('/getAllSavedAppNames', (req, res) => {
     dbHelper.getListOfAppNames(function (listOfNames) {
         console.log('ListOfNames: ', listOfNames);
 
         res.send({
-            appObject: listOfNames
+            savedAppsNames: listOfNames
         });
     });
 });
 
+app.post('/getReviewsFromAppName', (req, res) => {
+    console.log('getReviewsFromAppName', req.body.getReviewsFromAppName);
+});
+
+// Port listener
 app.listen(port, () => console.log(`Listening on port: ${port}`));
