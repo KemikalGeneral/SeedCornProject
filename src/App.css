@@ -1,50 +1,57 @@
-.App {
-    display: grid;
-    grid-template-rows: auto 1fr;
-
-    text-align: center;
-}
-
 .App p {
     padding: 4px 0;
     text-align: left;
 }
 
-/***** ***** Main Body ***** *****/
-.mainBody {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    padding: 32px;
-}
-
-.appDetailsContainer {}
-
-.appHeader {
-    display: grid;
-    grid-template-columns: auto 1fr;
-}
-
-.appHeader img {
+.FAB {
+    background: white;
+    border: 1px solid limegreen;
     border-radius: 8px;
+    color: limegreen;
+    padding: 8px;
+    position: relative;
+    text-decoration: none;
+    transition: 0.25s;
+    width: auto;
 }
 
-.appHeaderElements {
-    display: grid;
-    grid-template-rows: 50% 1fr auto;
-
-    padding: 0 16px;
+.FAB:hover {
+    background: limegreen;
+    color: white;
 }
 
-.App .appTitle {
-    font-size: 3em;
+/***** ***** Forms ***** *****/
+input {
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    margin-right: 8px;
+    padding: 8px;
+    transition: 0.25s;
 }
 
-.App .appDeveloper {
-    font-size: 1.5em;
+input:focus {
+    outline: none;
 }
 
-.App .appDescription {
-    padding: 32px 32px 16px 0;
-    text-align: justify;
+input::placeholder{
+    color: lightgrey;
+}
+
+input[type="submit"] {
+    background: white;
+    border: 1px solid lightgrey;
+    color: limegreen;
+    margin-right: 0;
+}
+
+input[type="submit"]:hover {
+    background: limegreen;
+    border: 1px solid limegreen;
+    box-shadow: 0 4px 8px grey;
+    color: white;
+    transform: translateY(-2.5px);
+}
+
+input[type="date"] {
+    padding: 5px;
 }

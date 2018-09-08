@@ -1,0 +1,48 @@
+@import url("./../../App.css");
+
+.App {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    text-align: center;
+}
+
+/***** ***** Main Body ***** *****/
+.mainBody {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    padding: 32px;
+}
+
+.appDetailsContainer {}
+
+.appHeader {
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.appHeader img {
+    border-radius: 8px;
+}
+
+.appHeaderElements {
+    display: grid;
+    grid-template-rows: 50% 1fr auto;
+
+    padding: 0 16px;
+}
+
+.App .appTitle {
+    font-size: 3em;
+}
+
+.App .appDeveloper {
+    font-size: 1.5em;
+}
+
+.App .appDescription {
+    padding: 32px 32px 16px 0;
+    text-align: justify;
+}
+
