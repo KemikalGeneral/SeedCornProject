@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './searchPageStyles.css';
-import Review from './../Reviews/Review';
-import TopBar from './../TopBar/TopBar';
+import Review from './Reviews/Review';
+import TopBar from '../Components/TopBar/TopBar';
 
 export default class SearchPage extends Component {
     state = {
