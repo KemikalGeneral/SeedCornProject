@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import './appNameListItemStyles.css';
+import './displayAppListItemStyles.css';
 
-export default class AppNameListItem extends Component {
+export default class DisplayAppListItem extends Component {
 
     handleClick = (event, name) => {
         this.props.callbackFromParent(name);
@@ -18,7 +18,7 @@ export default class AppNameListItem extends Component {
 
                                 <form action="/getReviewsFromAppName" method="post">
                                     <input type="submit"
-                                           value={data.app_name}
+                                           value={data}
                                            name="getReviewsFromAppName"
                                            onClick={(event) => this.handleClick(event, data.app_name)}
                                     />

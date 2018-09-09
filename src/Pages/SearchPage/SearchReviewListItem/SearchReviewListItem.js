@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import './reviewStyles.css';
+import './searchReviewListItemStyles.css';
 
-export default class Review extends Component {
+export default class SearchReviewListItem extends Component {
     render() {
         return (
-            <div className="reviewsContainer">
+            <div>
                 {
                     this.props.reviewData.map((data) => {
                         return (
-                            <div className="individualReviewContainer">
+                            <div className="reviewContainer">
 
                                 <div className="reviewHeader">
-                                    <p>{data.score} stars</p>
+                                    <p>{data.score} &#9734;</p>
                                     <p>{data.date}</p>
                                 </div>
                                 <p>{data.text}</p>
