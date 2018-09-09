@@ -1,5 +1,5 @@
 .appNameListItemContainer {
-    padding: 8px;
+    border-radius: 8px;
     text-align: left;
     transition: .25s;
 }
@@ -13,7 +13,10 @@
     border: none;
     box-shadow: none;
     color: grey;
-    padding: 4px;
+    cursor: pointer;
+    margin: 0;
+    padding: 16px;
     text-align: left;
     transform: none;
+    width: 100%;
 }
