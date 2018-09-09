@@ -1,25 +1,27 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 import './displayPageStyles.css';
-import AppNameListItem from './AppNameListItem/AppNameListItem';
+import DisplayAppListItem from './DisplayAppListItem/DisplayAppListItem';
+import DisplayReviewListItem from './DisplayReviewListItem/DisplayReviewListItem';
 
 export default class App extends Component {
     state = {
         savedAppsNames: [{}],
-        currentReview: [{}],
+        reviewsFromAppName: [{}],
     };
 
-    // When the component mounts, callApi() is called and returns the savedAppsNames.
-    // The returned objects are then assigned to the client's appData under a promise.
+    // When the component mounts, callApi() is called and returns the savedAppsNames and reviewsFromAppName.
+    // The returned objects are then assigned to the client's state under a promise.
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({
                 savedAppsNames: res.savedAppsNames,
+                reviewsFromAppName: res.reviewsFromAppName,
             }))
             .catch(err => console.log('Error: ', err));
     }
 
-    // Called from component mounting, returns a JSON of the appData
+    // Called from component mounting, returns a JSON of the saved app data
     callApi = async () => {
         const response = await fetch('/getAllSavedAppNames');
         const body = await response.json();
@@ -49,20 +51,10 @@ export default class App extends Component {
         return yearToday + '-' + monthToday + '-' + dayToday;
     };
 
-    dummyData =
-        [
-            {app_name: 'Dummy name 1'},
-            {app_name: 'Dummy name 2'},
-            {app_name: 'Dummy name 3'}
-        ];
-
+    // Get the reviews for the chosen app via the server's /getReviewsFromAppName route
+    // and assign them to currentReviews
     appNameCallback = (dataFromChild) => {
         console.log('dateFromChild: ', dataFromChild);
-
-        fetch('/boo')
-            .then(res => this.setState({
-                currentReview: res.currentReview,
-            }));
     };
 
     render() {
@@ -127,17 +119,20 @@ export default class App extends Component {
 
                     {/*Apps section section*/}
                     <div className="sectionContainer">
-                        {/*<AppNameListItem appNameData={this.dummyData}/>*/}
-
-                        <AppNameListItem
+                        <DisplayAppListItem
                             appNameData={this.state.savedAppsNames}
                             callbackFromParent={this.appNameCallback}
                         />
                     </div>
 
                     {/*Reviews section*/}
+                    {/*Display the no reviews message if an app hasn't been selected*/}
                     <div className="sectionContainer">
-                        <p>Review</p>
+                        {this.state.reviewsFromAppName.length === 0 ?
+                            <p>&#8678; Select an app to display its reviews...</p>
+                            :
+                            <DisplayReviewListItem displayReviewData={this.state.reviewsFromAppName}/>
+                        }
                     </div>
 
                 </div>
