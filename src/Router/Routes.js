@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 // Pages
-import SearchPage from '../Components/SearchPage/SearchPage';
-import DisplayPage from '../Components/DisplayPage/DisplayPage';
+import SearchPage from '../Pages/SearchPage/SearchPage';
+import DisplayPage from '../Pages/DisplayPage/DisplayPage';
 
 export default class Routes extends Component {
     render() {

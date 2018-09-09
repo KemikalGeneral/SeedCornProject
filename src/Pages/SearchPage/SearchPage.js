@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './searchPageStyles.css';
-import Review from './../Reviews/Review';
-import TopBar from './../TopBar/TopBar';
+import SearchReviewListItem from './SearchReviewListItem/SearchReviewListItem';
+import TopBar from '../Components/TopBar/TopBar';
 
 export default class SearchPage extends Component {
     state = {
@@ -10,7 +10,7 @@ export default class SearchPage extends Component {
     };
 
     // When the component mounts, callApi() is called and returns the appData and the reviewData.
-    // The returned objects are then assigned to the client's appData under a promise.
+    // The returned objects are then assigned to the client's state under a promise.
     componentDidMount() {
         this.callApi()
             .then(res => this.setState({
@@ -20,7 +20,7 @@ export default class SearchPage extends Component {
             .catch(err => console.log('Error: ', err));
     }
 
-    // Called from component mounting, returns a JSON of the appData
+    // Called from component mounting, returns a JSON of the selected app.
     callApi = async () => {
         const response = await fetch('/index');
         const body = await response.json();
@@ -84,7 +84,7 @@ export default class SearchPage extends Component {
 
                     {/*Review details*/}
                     <div className="appReviewsContainer">
-                        <Review reviewData={this.state.reviewData}/>
+                        <SearchReviewListItem reviewData={this.state.reviewData}/>
                     </div>
 
                 </div>
