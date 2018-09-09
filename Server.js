@@ -14,6 +14,8 @@ let appToScrape = 'com.android.chrome';
 let returnedAppResults;
 let returnedReviewResults;
 
+let reviewsFromAppName = [];
+
 /**
  * Using the appToScrape variable as the appId,
  * search the Google Play Store for the requested app and return as a Promise.
@@ -30,11 +32,7 @@ app.get('/index', (req, res) => {
             // console.log('Reviews: ', reviewData);
             // console.log('App data: ', appData);
 
-            // dbHelper.findAll();
-
             dbHelper.getListOfAppNames(function (listOfNames) {
-                // console.log('ListOfNames: ', listOfNames);
-
                 res.send({
                     appData: appData,
                     reviewData: reviewData,
@@ -100,20 +98,55 @@ app.post('/save', (req, res) => {
 });
 
 /**
- * Return a JSON of all saved app names
+ * Loop through all the apps and create an array of unique names for the list.
+ * Return a JSON of names.
  */
 app.get('/getAllSavedAppNames', (req, res) => {
-    dbHelper.getListOfAppNames(function (listOfNames) {
-        console.log('ListOfNames: ', listOfNames);
+    console.log('==================== /getAllSavedAppNames ====================');
+
+    dbHelper.findAll(function (data) {
+        let lastName = data[0].app_name;
+        let uniqueNames = [lastName];
+        for (let app of data) {
+            if (app.app_name !== lastName) {
+                uniqueNames.push(app.app_name);
+                lastName = app.app_name;
+            }
+        }
 
         res.send({
-            savedAppsNames: listOfNames
+            savedAppsNames: uniqueNames,
+            reviewsFromAppName: reviewsFromAppName
         });
     });
 });
 
+/**
+ * Loop through all the apps and create review object out of the apps with a matching name to the query.
+ * Assign the array of reviews and redirect to /displayPage to view them.
+ */
 app.post('/getReviewsFromAppName', (req, res) => {
-    console.log('getReviewsFromAppName', req.body.getReviewsFromAppName);
+    console.log('==================== /getReviewsFromAppName ====================');
+
+    const appName = req.body.getReviewsFromAppName;
+
+    dbHelper.findAll(function (data) {
+        let reviewsForApp = [];
+        for (let app of data) {
+            if (app.app_name === appName) {
+                let newReviewObject = {
+                    reviewText : app.review_text,
+                    reviewScore : app.review_score,
+                    reviewDate : app.review_date
+                };
+
+                reviewsForApp.push(newReviewObject);
+            }
+        }
+        reviewsFromAppName = reviewsForApp;
+
+        res.redirect('/displayPage');
+    });
 });
 
 // Port listener
