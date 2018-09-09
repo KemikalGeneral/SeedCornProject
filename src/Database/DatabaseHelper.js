@@ -18,7 +18,7 @@ class DatabaseHelper {
     constructor() {
         console.log('Database constructor');
         // db = new sqlite3.Database(':memory:', (err) => {
-            db = new sqlite3.Database('./src/Database/schema.db', (err) => {
+        db = new sqlite3.Database('./src/Database/schema.db', (err) => {
             console.log('\n========== CREATE ==========');
             if (err) {
                 return console.error(err.message);
@@ -74,23 +74,26 @@ class DatabaseHelper {
     /**
      * FindAll - Find all app and associated review data
      */
-    findAll() {
+    findAll(callback) {
         // this.open();
-        db.all(`SELECT *
+        let appData = [];
+
+        db.each(`SELECT *
                 FROM app
-                       JOIN review ON app.app_id = review.app_id`, (err, rows) => {
+                       JOIN review ON app.app_id = review.app_id`, (err, row) => {
             console.log('\n========== FindAll ==========');
             if (err) {
                 return console.error(err.message);
             }
-            console.log('All rows: \n', rows);
+            // console.log('All rows: \n', rows);
 
-            rows.forEach((row) => {
-                // console.log('ForEachRow: ', row);
-            });
+            appData.push(row);
+        }, function () {
+            callback(appData)
         });
+
         // this.close();
-    };
+    }
 
     /**
      * FindOne - Finds the app and review data for a single app.
@@ -119,13 +122,30 @@ class DatabaseHelper {
     getListOfAppNames(callback) {
         let names = [];
 
-        db.each(`SELECT app_name FROM app`, (err, row) => {
+        db.each(`SELECT app_name
+                 FROM app`, (err, row) => {
+            console.log('\n========== getListOfAppNames ==========');
             if (err) {
                 console.error(err.message);
             }
             names.push(row);
-        }, function() {
+        }, function () {
             callback(names);
+        });
+    }
+
+    getReviewsFromAppName(callback) {
+        let reviews = [];
+
+        db.each(`SELECT *
+                     FROM review`, (err, row) => {
+            console.log('\n========== getReviewsFromAppName ==========');
+            if (err) {
+                console.error(err.message);
+            }
+            reviews.push(row);
+        }, function () {
+            callback(reviews)
         });
     }
 
