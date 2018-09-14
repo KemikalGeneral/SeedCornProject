@@ -68,7 +68,7 @@ export default class App extends Component {
 
                     {/*Config section*/}
                     <div className="sectionContainer">
-                        {/*<input type="submit" value="Show all saved apps"/>*/}
+                        {/*<input type="submit" value="Show all saved apps "/>*/}
 
                         {/*<hr/>*/}
 
