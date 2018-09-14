@@ -68,9 +68,9 @@ export default class App extends Component {
 
                     {/*Config section*/}
                     <div className="sectionContainer">
-                        <input type="submit" value="Show all saved apps"/>
+                        {/*<input type="submit" value="Show all saved apps"/>*/}
 
-                        <hr/>
+                        {/*<hr/>*/}
 
                         <p className="sectionHeading">Refine search</p>
 
@@ -103,6 +103,7 @@ export default class App extends Component {
                             </div>
 
                             <div>
+                                <br/>
                                 <input type="submit" value="Refine"/>
                             </div>
 
@@ -111,7 +112,10 @@ export default class App extends Component {
                             <p className="sectionHeading">Sentiment Analysis</p>
 
                             <div>
-                                <input type="submit" value="Run Sentiment Analysis"/>
+                                <br/>
+                                <form action="/#" method="post">
+                                    <input type="submit" value="Run Sentiment Analysis"/>
+                                </form>
                             </div>
 
                         </form>
@@ -119,10 +123,14 @@ export default class App extends Component {
 
                     {/*Apps section section*/}
                     <div className="sectionContainer">
-                        <DisplayAppListItem
-                            appNameData={this.state.savedAppsNames}
-                            callbackFromParent={this.appNameCallback}
-                        />
+                        {this.state.savedAppsNames.length !== 0 ?
+                            <DisplayAppListItem
+                                appNameData={this.state.savedAppsNames}
+                                callbackFromParent={this.appNameCallback}
+                            />
+                            :
+                            <p>No saved apps</p>
+                        }
                     </div>
 
                     {/*Reviews section*/}

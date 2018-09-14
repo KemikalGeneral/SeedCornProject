@@ -79,8 +79,8 @@ class DatabaseHelper {
         let appData = [];
 
         db.each(`SELECT *
-                FROM app
-                       JOIN review ON app.app_id = review.app_id`, (err, row) => {
+                 FROM app
+                        JOIN review ON app.app_id = review.app_id`, (err, row) => {
             console.log('\n========== FindAll ==========');
             if (err) {
                 return console.error(err.message);
@@ -134,11 +134,16 @@ class DatabaseHelper {
         });
     }
 
+    /**
+     * GetReviewsFromAppName - Returns a list of the reviews stored in the database.
+     * Uses a 'complete' callback to pass back the review data.
+     * @param callback
+     */
     getReviewsFromAppName(callback) {
         let reviews = [];
 
         db.each(`SELECT *
-                     FROM review`, (err, row) => {
+                 FROM review`, (err, row) => {
             console.log('\n========== getReviewsFromAppName ==========');
             if (err) {
                 console.error(err.message);
@@ -146,6 +151,22 @@ class DatabaseHelper {
             reviews.push(row);
         }, function () {
             callback(reviews)
+        });
+    }
+
+    /**
+     * AddSentimentResult - updates the review table with the sentiment analysis score for the give review ID.
+     * @param reviewSentiment
+     * @param reviewId
+     */
+    addSentimentResult(reviewSentiment, reviewId) {
+        console.log('\n========== addSentimentResult ==========');
+        db.run(`UPDATE review
+                SET review_sentiment = ?
+                WHERE review_id = (?)`, [reviewSentiment, reviewId], function (err) {
+            if (err) {
+                return console.error(err.message);
+            }
         });
     }
 
@@ -191,6 +212,7 @@ const createReviewTable = `create table IF NOT EXISTS review (
   review_score     varchar(50) not null,
   review_date      date        not null,
   date_of_scraping date        not null default (datetime('now', 'localtime')),
+  review_sentiment real                 default 0,
   app_id           integer     not null,
   constraint FK_app_id foreign key (app_id) references app (app_id)
 )`;

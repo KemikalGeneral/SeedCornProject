@@ -134,10 +134,13 @@ app.post('/getReviewsFromAppName', (req, res) => {
         let reviewsForApp = [];
         for (let app of data) {
             if (app.app_name === appName) {
+                console.log(app.review_sentiment);
                 let newReviewObject = {
-                    reviewText : app.review_text,
-                    reviewScore : app.review_score,
-                    reviewDate : app.review_date
+                    reviewId: app.review_id,
+                    reviewText: app.review_text,
+                    reviewScore: app.review_score,
+                    reviewDate: app.review_date,
+                    reviewSentiment: app.review_sentiment
                 };
 
                 reviewsForApp.push(newReviewObject);
@@ -148,6 +151,43 @@ app.post('/getReviewsFromAppName', (req, res) => {
         res.redirect('/displayPage');
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/runSentimentAnalysis', (req, res) => {
+    console.log('==================== /runSentimentAnalysis ====================');
+
+    // console.log('server - Review id: ', req.body.reviewId);
+    // console.log('server - Review text: ', req.body.reviewText);
+
+    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', req.body.reviewText]);
+
+    exec.stdout.on('data', function (data) {
+        dbHelper.addSentimentResult(data.toString(), req.body.reviewId);
+
+    });
+
+    res.redirect('/displayPage');
+
+});
+
+
+
+
+
+
+
+
 
 // Port listener
 app.listen(port, () => console.log(`Listening on port: ${port}`));
