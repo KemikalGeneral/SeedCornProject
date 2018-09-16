@@ -59,12 +59,12 @@ export default class SearchPage extends Component {
                                 </div>
 
                                 {/*Price, downloads, and ratings*/}
-                                <p>
+                                <div>
                                     <p>{this.state.appData.priceText}</p>
                                     <p>{this.state.appData.installs} downloads</p>
                                     <p>{this.state.appData.score} stars from &nbsp;
                                         {this.state.appData.ratings} ratings</p>
-                                </p>
+                                </div>
 
                                 {/*Genre*/}
                                 <p>
