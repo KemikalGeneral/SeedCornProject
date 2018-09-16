@@ -111,15 +111,23 @@ app.get('/getAllSavedAppNames', (req, res) => {
     console.log('==================== /getAllSavedAppNames ====================');
 
     dbHelper.findAll(function (data) {
-        let lastName = data[0].app_name;
-        let uniqueNames = [lastName];
-        for (let app of data) {
-            if (app.app_name !== lastName) {
-                uniqueNames.push(app.app_name);
-                lastName = app.app_name;
+        // If no apps are found in DB, show a message
+        let uniqueNames = [];
+        if (data.length === 0) {
+            console.log('Nothing found in database');
+            uniqueNames.push('No apps saved');
+        } else {
+            // Create an array of unique app names
+            let lastName = data[0].app_name;
+            uniqueNames = [lastName];
+
+            for (let app of data) {
+                if (app.app_name !== lastName) {
+                    uniqueNames.push(app.app_name);
+                    lastName = app.app_name;
+                }
             }
         }
-
         res.send({
             savedAppsNames: uniqueNames,
             reviewsFromAppName: reviewsFromAppName
@@ -220,8 +228,6 @@ app.post('/refineByDate', (req, res) => {
                 selectedGetDate === reviewGetDate
                 && selectedMonth === reviewMonth
                 && selectedYear === reviewYear) {
-                console.log('selectedDate: ', selectedGetDate);
-                console.log('reviewDate: ', reviewGetDate);
 
                 let newReviewObject = {
                     reviewId: app.review_id,
