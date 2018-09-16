@@ -22,7 +22,7 @@ export default class TopBar extends Component {
 
     render() {
         return (
-            <div className="topBar">
+            <div className=" topBar searchTopBar">
 
                 {/*Search form*/}
                 <form action="/search" method="post">

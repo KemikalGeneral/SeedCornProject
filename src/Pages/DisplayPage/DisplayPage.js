@@ -62,7 +62,7 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <div className="topBar">
+                <div className="topBar displayTopBar">
                     <Link to="/index" className="FAB">Back to Search</Link>
                 </div>
 
