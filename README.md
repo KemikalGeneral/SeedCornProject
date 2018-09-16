@@ -37,4 +37,4 @@
 
 - Both of these limitations will be looked into further depending on the requirements, but are not expected to be completely removed.
 
-- The StanfordNlp.jar file cannot be added to GIT as it is a very large file (> 3GB), so will need to be manually added to the route directory.
+- The StanfordNlp.jar file cannot be added to GIT as it is a very large file (> 3GB), so will need to be manually [downloaded](https://drive.google.com/file/d/1XOFnwqoC5Bnq7D8yu_yU6tXtCRkYsI0_/view?usp=sharing) and added to the route directory.
