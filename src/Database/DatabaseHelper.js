@@ -40,8 +40,7 @@ class DatabaseHelper {
      * @param appVersion
      * @param reviewsArray
      */
-    insertNewAppAndReview(appName, appDeveloper, appSize, appVersion,
-                          reviewsArray) {
+    insertNewAppAndReview(appName, appDeveloper, appSize, appVersion, reviewsArray) {
         // this.open();
 
         // Save app details
@@ -81,7 +80,7 @@ class DatabaseHelper {
         db.each(`SELECT *
                  FROM app
                         JOIN review ON app.app_id = review.app_id`, (err, row) => {
-            console.log('\n========== FindAll ==========');
+            // console.log('\n========== FindAll ==========');
             if (err) {
                 return console.error(err.message);
             }

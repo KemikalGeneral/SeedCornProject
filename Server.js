@@ -24,8 +24,14 @@ let reviewsFromAppName = [];
 app.get('/index', (req, res) => {
     console.log('==================== /index ====================');
 
-    returnedAppResults = googlePlayApp.app({appId: appToScrape, country: 'gb'});
-    returnedReviewResults = googlePlayApp.reviews({appId: appToScrape});
+    returnedAppResults = googlePlayApp.app({
+        appId: appToScrape,
+        country: 'gb'
+    });
+    returnedReviewResults = googlePlayApp.reviews({
+        appId: appToScrape,
+        sort: googlePlayApp.sort.NEWEST
+    });
 
     returnedAppResults.then(function (appData) {
         returnedReviewResults.then(function (reviewData) {
@@ -134,7 +140,6 @@ app.post('/getReviewsFromAppName', (req, res) => {
         let reviewsForApp = [];
         for (let app of data) {
             if (app.app_name === appName) {
-                console.log(app.review_sentiment);
                 let newReviewObject = {
                     reviewId: app.review_id,
                     reviewText: app.review_text,
@@ -152,42 +157,87 @@ app.post('/getReviewsFromAppName', (req, res) => {
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Take the reviewId and the reviewText from the incoming body.
+ * Use the reviewText to send to the sentiment analyser,
+ * and use the reviewId to save the sentiment result to the selected review.
+ */
 app.post('/runSentimentAnalysis', (req, res) => {
     console.log('==================== /runSentimentAnalysis ====================');
-
-    // console.log('server - Review id: ', req.body.reviewId);
-    // console.log('server - Review text: ', req.body.reviewText);
-
     const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', req.body.reviewText]);
 
     exec.stdout.on('data', function (data) {
         dbHelper.addSentimentResult(data.toString(), req.body.reviewId);
-
     });
 
     res.redirect('/displayPage');
-
 });
 
 
+app.post('/refineByRating', (req, res) => {
+    console.log('refine: ', req.body.rating);
+
+    dbHelper.findAll(function (data) {
+        let reviewsForApp = [];
+        for (let app of data) {
+            if (app.review_score === req.body.rating) {
+                let newReviewObject = {
+                    reviewId: app.review_id,
+                    reviewText: app.review_text,
+                    reviewScore: app.review_score,
+                    reviewDate: app.review_date,
+                    reviewSentiment: app.review_sentiment
+                };
+                reviewsForApp.push(newReviewObject);
+            }
+        }
+        reviewsFromAppName = reviewsForApp;
+
+        res.redirect('/displayPage');
+    });
+});
 
 
+app.post('/refineByDate', (req, res) => {
+    console.log('from: ', req.body.dateFrom);
+    console.log('to: ', req.body.backTo);
 
+    const selectedDate = new Date(req.body.dateFrom);
+    const selectedGetDate = selectedDate.getDate();
+    const selectedYear = selectedDate.getFullYear();
+    const selectedMonth = selectedDate.getMonth();
 
+    dbHelper.findAll(function (data) {
+        let reviewsForApp = [];
+        for (let app of data) {
 
+            const reviewDate = new Date(app.review_date);
+            const reviewGetDate = reviewDate.getDate();
+            const reviewYear = reviewDate.getFullYear();
+            const reviewMonth = reviewDate.getMonth();
 
+            if (
+                selectedGetDate === reviewGetDate
+                && selectedMonth === reviewMonth
+                && selectedYear === reviewYear) {
+                console.log('selectedDate: ', selectedGetDate);
+                console.log('reviewDate: ', reviewGetDate);
+
+                let newReviewObject = {
+                    reviewId: app.review_id,
+                    reviewText: app.review_text,
+                    reviewScore: app.review_score,
+                    reviewDate: app.review_date,
+                    reviewSentiment: app.review_sentiment
+                };
+                reviewsForApp.push(newReviewObject);
+            }
+        }
+        reviewsFromAppName = reviewsForApp;
+
+        res.redirect('/displayPage');
+    });
+});
 
 // Port listener
 app.listen(port, () => console.log(`Listening on port: ${port}`));

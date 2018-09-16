@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import './displayReviewListItemStyles.css';
 
 export default class DisplayReviewListItem extends Component {
+
+    handleClick = (event, name) => {
+        this.props.callbackFromParent(name);
+    };
+
     render() {
         return (
             <div>
@@ -15,16 +20,12 @@ export default class DisplayReviewListItem extends Component {
 
                             if (reviewSentiment >= 3) {
                                 className = 'displayReviewContainer positive';
-                                console.log('p: ', reviewSentiment);
                             } else if (reviewSentiment >= 2) {
                                 className = 'displayReviewContainer neutral';
-                                console.log('Nu: ', reviewSentiment);
                             } else if (reviewSentiment >= 1) {
                                 className = 'displayReviewContainer negative';
-                                console.log('n: ', reviewSentiment);
-                            } else if (reviewSentiment >= 0) {
+                            } else {
                                 className = 'displayReviewContainer';
-                                console.log('e: ', reviewSentiment);
                             }
 
                             return className;
@@ -57,6 +58,7 @@ export default class DisplayReviewListItem extends Component {
                                         <input className="runButton"
                                                type="submit"
                                                value="Run"
+                                               onClick={(event) => this.handleClick(event, data.reviewId)}
                                         />
                                     </form>
 
