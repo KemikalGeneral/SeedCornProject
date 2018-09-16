@@ -13,6 +13,7 @@ export default class App extends Component {
     // When the component mounts, callApi() is called and returns the savedAppsNames and reviewsFromAppName.
     // The returned objects are then assigned to the client's state under a promise.
     componentDidMount() {
+        console.log('CDM');
         this.callApi()
             .then(res => this.setState({
                 savedAppsNames: res.savedAppsNames,
@@ -55,6 +56,7 @@ export default class App extends Component {
     // and assign them to currentReviews
     appNameCallback = (dataFromChild) => {
         console.log('dateFromChild: ', dataFromChild);
+        this.componentDidMount();
     };
 
     render() {
@@ -68,61 +70,79 @@ export default class App extends Component {
 
                     {/*Config section*/}
                     <div className="sectionContainer">
-                        <input type="submit" value="Show all saved apps"/>
 
-                        <hr/>
+                        {/*Refine search*/}
+                        <div>
+                            <p className="sectionHeading">Refine search</p>
 
-                        <p className="sectionHeading">Refine search</p>
-
-                        <form action="#">
-                            {/*Review rating*/}
-                            <div className="formRow">
-                                <p>Review rating</p>
-                                <input type="number" min="0" max="5" placeholder="0-5"/>
-                            </div>
-
-                            {/*Dates*/}
-                            <div>
+                            <form action="/refineByRating" method="post">
+                                {/*Review rating*/}
                                 <div className="formRow">
-                                    <p>Date from</p>
-                                    <input id="dateFrom"
-                                           type="date"
-                                           min="2008-08-22"
-                                           max={this.getDate()}
-                                           defaultValue={this.getDate()}/>
+                                    <p>Review rating</p>
+                                    <input name="rating" type="number" min="1" max="5" placeholder="1-5"
+                                           required={true}/>
                                 </div>
 
-                                <div className="formRow">
-                                    <p>Back to</p>
-                                    <input id="dateTo"
-                                           type="date"
-                                           min="2008-08-22"
-                                           max={this.getDate()}
-                                           defaultValue="2008-08-22"/>
-                                </div>
-                            </div>
-
-                            <div>
-                                <input type="submit" value="Refine"/>
-                            </div>
+                                <input type="submit" value="Refine by rating"/>
+                            </form>
 
                             <hr/>
 
-                            <p className="sectionHeading">Sentiment Analysis</p>
+                            {/*Dates*/}
+                            <form action="/refineByDate" method="post">
+                                <div>
+                                    <div className="formRow">
+                                        <p>Date from</p>
+                                        <input id="dateFrom"
+                                               name="dateFrom"
+                                               type="date"
+                                               min="2008-08-22"
+                                               max={this.getDate()}
+                                               defaultValue={this.getDate()}
+                                               required={true}/>
+                                    </div>
 
-                            <div>
-                                <input type="submit" value="Run Sentiment Analysis"/>
-                            </div>
+                                    <div className="formRow">
+                                        <p>Back to</p>
+                                        <input id="dateTo"
+                                               name="backTo"
+                                               type="date"
+                                               min="2008-08-22"
+                                               max={this.getDate()}
+                                               defaultValue="2008-08-22"
+                                               required={true}/>
+                                    </div>
+                                </div>
 
-                        </form>
+                                <input type="submit" value="Refine by date"/>
+                            </form>
+                        </div>
+
+                        {/*<hr/>*/}
+
+                        {/*Sentiment analysis*/}
+                        {/*<div>*/}
+                        {/*<p className="sectionHeading">Sentiment Analysis</p>*/}
+
+                        {/*<div>*/}
+                        {/*<form action="/#" method="post">*/}
+                        {/*<input type="submit" value="Run Sentiment Analysis"/>*/}
+                        {/*</form>*/}
+                        {/*</div>*/}
+                        {/*</div>*/}
+
                     </div>
 
                     {/*Apps section section*/}
                     <div className="sectionContainer">
-                        <DisplayAppListItem
-                            appNameData={this.state.savedAppsNames}
-                            callbackFromParent={this.appNameCallback}
-                        />
+                        {this.state.savedAppsNames.length !== 0 ?
+                            <DisplayAppListItem
+                                appNameData={this.state.savedAppsNames}
+                                callbackFromParent={this.appNameCallback}
+                            />
+                            :
+                            <p>No saved apps</p>
+                        }
                     </div>
 
                     {/*Reviews section*/}
@@ -131,7 +151,10 @@ export default class App extends Component {
                         {this.state.reviewsFromAppName.length === 0 ?
                             <p>&#8678; Select an app to display its reviews...</p>
                             :
-                            <DisplayReviewListItem displayReviewData={this.state.reviewsFromAppName}/>
+                            <DisplayReviewListItem
+                                displayReviewData={this.state.reviewsFromAppName}
+                                callbackFromParent={this.appNameCallback}
+                            />
                         }
                     </div>
 

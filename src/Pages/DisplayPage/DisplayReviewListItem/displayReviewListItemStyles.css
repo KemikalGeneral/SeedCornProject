@@ -1,0 +1,57 @@
+.displayReviewContainer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+
+    border-radius: 8px;
+    box-shadow: 0 8px 8px lightgrey;
+    margin-bottom: 8px;
+    padding: 16px;
+}
+
+.displayReviewContainer .reviewHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.displayReviewContainer .reviewHeader p {
+    color: lightgray;
+}
+
+.displayReviewContainer .reviewHeader p:last-child {
+    text-align: right;
+}
+
+.displayReviewContainer .runButtonContainer p {
+    background: #e1e1e1;
+    border-radius: 25%;
+    float: right;
+    margin-top: 16px;
+    padding: 8px;
+    width: 47px;
+    text-align: center;
+}
+
+.displayReviewContainer .runButtonContainer .runButton {
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    margin: 0 0 0 16px;
+    transition: .25s;
+}
+
+.displayReviewContainer .runButtonContainer .runButton:hover {
+    border: 1px solid limegreen;
+    cursor: pointer;
+}
+
+.positive {
+    border: 1px solid yellowgreen;
+    box-shadow: 0 0 16px yellowgreen inset;
+}
+.neutral {
+    border: 1px solid cornflowerblue;
+    box-shadow: 0 0 16px cornflowerblue inset;
+}
+.negative {
+    border: 1px solid red;
+    box-shadow: 0 0 16px red inset;
+}
