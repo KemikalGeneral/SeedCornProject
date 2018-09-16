@@ -181,7 +181,9 @@ app.post('/runSentimentAnalysis', (req, res) => {
     res.redirect('/displayPage');
 });
 
-
+/**
+ * Not yet being used
+ */
 app.post('/refineByRating', (req, res) => {
     console.log('refine: ', req.body.rating);
 
@@ -205,7 +207,9 @@ app.post('/refineByRating', (req, res) => {
     });
 });
 
-
+/**
+ * Not yet being used
+ */
 app.post('/refineByDate', (req, res) => {
     console.log('from: ', req.body.dateFrom);
     console.log('to: ', req.body.backTo);

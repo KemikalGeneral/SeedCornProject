@@ -68,70 +68,56 @@ export default class App extends Component {
 
                 <div className="displayPageContainer">
 
-                    {/*Config section*/}
-                    <div className="sectionContainer">
+                    {/*/!*Config section*!/*/}
+                    {/*<div className="sectionContainer">*/}
 
-                        {/*Refine search*/}
-                        <div>
-                            <p className="sectionHeading">Refine search</p>
-
-                            <form action="/refineByRating" method="post">
-                                {/*Review rating*/}
-                                <div className="formRow">
-                                    <p>Review rating</p>
-                                    <input name="rating" type="number" min="1" max="5" placeholder="1-5"
-                                           required={true}/>
-                                </div>
-
-                                <input type="submit" value="Refine by rating"/>
-                            </form>
-
-                            <hr/>
-
-                            {/*Dates*/}
-                            <form action="/refineByDate" method="post">
-                                <div>
-                                    <div className="formRow">
-                                        <p>Date from</p>
-                                        <input id="dateFrom"
-                                               name="dateFrom"
-                                               type="date"
-                                               min="2008-08-22"
-                                               max={this.getDate()}
-                                               defaultValue={this.getDate()}
-                                               required={true}/>
-                                    </div>
-
-                                    <div className="formRow">
-                                        <p>Back to</p>
-                                        <input id="dateTo"
-                                               name="backTo"
-                                               type="date"
-                                               min="2008-08-22"
-                                               max={this.getDate()}
-                                               defaultValue="2008-08-22"
-                                               required={true}/>
-                                    </div>
-                                </div>
-
-                                <input type="submit" value="Refine by date"/>
-                            </form>
-                        </div>
-
-                        {/*<hr/>*/}
-
-                        {/*Sentiment analysis*/}
+                        {/*/!*Refine search*!/*/}
                         {/*<div>*/}
-                        {/*<p className="sectionHeading">Sentiment Analysis</p>*/}
+                            {/*<p className="sectionHeading">Refine search</p>*/}
 
-                        {/*<div>*/}
-                        {/*<form action="/#" method="post">*/}
-                        {/*<input type="submit" value="Run Sentiment Analysis"/>*/}
-                        {/*</form>*/}
-                        {/*</div>*/}
-                        {/*</div>*/}
+                            {/*<form action="/refineByRating" method="post">*/}
+                                {/*/!*Review rating*!/*/}
+                                {/*<div className="formRow">*/}
+                                    {/*<p>Review rating</p>*/}
+                                    {/*<input name="rating" type="number" min="1" max="5" placeholder="1-5"*/}
+                                           {/*required={true}/>*/}
+                                {/*</div>*/}
 
-                    </div>
+                                {/*<input type="submit" value="Refine by rating"/>*/}
+                            {/*</form>*/}
+
+                            {/*<hr/>*/}
+
+                            {/*/!*Dates*!/*/}
+                            {/*<form action="/refineByDate" method="post">*/}
+                                {/*<div>*/}
+                                    {/*<div className="formRow">*/}
+                                        {/*<p>Date from</p>*/}
+                                        {/*<input id="dateFrom"*/}
+                                               {/*name="dateFrom"*/}
+                                               {/*type="date"*/}
+                                               {/*min="2008-08-22"*/}
+                                               {/*max={this.getDate()}*/}
+                                               {/*defaultValue={this.getDate()}*/}
+                                               {/*required={true}/>*/}
+                                    {/*</div>*/}
+
+                                    {/*<div className="formRow">*/}
+                                        {/*<p>Back to</p>*/}
+                                        {/*<input id="dateTo"*/}
+                                               {/*name="backTo"*/}
+                                               {/*type="date"*/}
+                                               {/*min="2008-08-22"*/}
+                                               {/*max={this.getDate()}*/}
+                                               {/*defaultValue="2008-08-22"*/}
+                                               {/*required={true}/>*/}
+                                    {/*</div>*/}
+                                {/*</div>*/}
+
+                                {/*<input type="submit" value="Refine by date"/>*/}
+                            {/*</form>*/}
+                        {/*</div>*/}
+                    {/*</div>*/}
 
                     {/*Apps section section*/}
                     <div className="sectionContainer">
