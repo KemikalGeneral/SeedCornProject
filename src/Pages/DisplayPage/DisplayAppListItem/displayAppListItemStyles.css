@@ -20,3 +20,7 @@
     transform: none;
     width: 100%;
 }
+
+.appNameListItemContainer input[type=submit]:focus {
+    outline: none;
+}

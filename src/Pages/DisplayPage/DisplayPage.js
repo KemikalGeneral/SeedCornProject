@@ -8,12 +8,12 @@ export default class App extends Component {
     state = {
         savedAppsNames: [{}],
         reviewsFromAppName: [{}],
+        isButtonVisible: false,
     };
 
     // When the component mounts, callApi() is called and returns the savedAppsNames and reviewsFromAppName.
     // The returned objects are then assigned to the client's state under a promise.
     componentDidMount() {
-        console.log('CDM');
         this.callApi()
             .then(res => this.setState({
                 savedAppsNames: res.savedAppsNames,
@@ -52,18 +52,25 @@ export default class App extends Component {
         return yearToday + '-' + monthToday + '-' + dayToday;
     };
 
-    // Get the reviews for the chosen app via the server's /getReviewsFromAppName route
-    // and assign them to currentReviews
+    // Callback when an app name is clicked to set the visibility of the 'Run Sentiment Analyser on all Reviews' button
     appNameCallback = (dataFromChild) => {
-        console.log('dateFromChild: ', dataFromChild);
-        this.componentDidMount();
+        this.setState({isButtonVisible: true});
     };
 
     render() {
         return (
             <div>
                 <div className="topBar displayTopBar">
-                    <Link to="/index" className="FAB">Back to Search</Link>
+                    <Link to="/index" className="button">Back to Search</Link>
+                    <form action="/runBatchSentimentAnalysis" method="post" className="allSentimentsButton">
+                        {this.state.reviewsFromAppName.length > 0 ?
+                            <input className="button" type="submit" value="Run Sentiment Analyser on all Reviews"
+                            disabled={false}/>
+                            :
+                            <input className="disabled" type="submit" value="Run Sentiment Analyser on all Reviews"
+                            disabled={true}/>
+                        }
+                    </form>
                 </div>
 
                 <div className="displayPageContainer">
@@ -139,7 +146,7 @@ export default class App extends Component {
                             :
                             <DisplayReviewListItem
                                 displayReviewData={this.state.reviewsFromAppName}
-                                callbackFromParent={this.appNameCallback}
+                                // callbackFromParent={this.appNameCallback}
                             />
                         }
                     </div>

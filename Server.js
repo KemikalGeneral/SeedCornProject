@@ -170,13 +170,48 @@ app.post('/getReviewsFromAppName', (req, res) => {
  * Use the reviewText to send to the sentiment analyser,
  * and use the reviewId to save the sentiment result to the selected review.
  */
-app.post('/runSentimentAnalysis', (req, res) => {
-    console.log('==================== /runSentimentAnalysis ====================');
-    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', req.body.reviewText]);
+app.post('/runSingleSentimentAnalysis', (req, res) => {
+    console.log('==================== /runSingleSentimentAnalysis ====================');
 
+    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', req.body.reviewText]);
     exec.stdout.on('data', function (data) {
-        dbHelper.addSentimentResult(data.toString(), req.body.reviewId);
+
+        console.log('data: ', data.toString());
+        if (data.toString() === '') {
+            console.log('no data: ');
+        }
+
+        // dbHelper.addSentimentResult(data.toString(), req.body.reviewId);
+
+        console.log('score: ', req.body.reviewText, ' ', data.toString());
+
     });
+
+    res.redirect('/displayPage');
+});
+
+app.post('/runBatchSentimentAnalysis', (req, res) => {
+    console.log('==================== /runBatchSentimentAnalysis ====================');
+
+    let allReviews = [];
+    let singleReview = [];
+
+    for (let review of reviewsFromAppName) {
+
+        singleReview.push(review.reviewId.toString());
+        singleReview.push(review.reviewText);
+
+        allReviews.push(singleReview);
+
+        // const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', review.reviewText]);
+
+        // exec.stdout.on('data', function (data) {
+        //     dbHelper.addSentimentResult(data.toString(), review.reviewId);
+        // });
+
+    }
+    console.log('reviews: ', reviewsFromAppName);
+
 
     res.redirect('/displayPage');
 });

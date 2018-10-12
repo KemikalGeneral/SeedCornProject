@@ -26,7 +26,8 @@ export default class TopBar extends Component {
 
                 {/*Search form*/}
                 <form action="/search" method="post">
-                    <input type="text"
+                    <input className="searchInput"
+                           type="text"
                            name="appToSearch"
                            value={this.state.textInputValue}
                            placeholder="Google Play Store app URL (e.g. https://play.google.com/store/apps/details?id=com.android.chrome)"
@@ -34,17 +35,18 @@ export default class TopBar extends Component {
 
                     {this.state.textInputValue.startsWith('https://play.google.com/store/apps/')
                         ?
-                        <input type="submit" value="Search"/>
+                        <input className="button" type="submit" value="Search"/>
                         :
-                        <input type="submit" value="Search" style={{color: 'red'}} disabled={true}/>}
+                        <input className="disabled" type="submit" value="Search" disabled={true}/>
+                    }
                 </form>
 
                 {/*Save reviews*/}
                 <form className="save" action="/save" method="post">
-                    <input type="submit" value="Save App and Reviews"/>
+                    <input className="button" type="submit" value="Save App and Reviews"/>
                 </form>
 
-                <Link to="/displayPage" className="FAB">Go to Display</Link>
+                <Link to="/displayPage" className="button">Go to Display</Link>
 
             </div>
         );

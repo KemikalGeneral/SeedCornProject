@@ -42,7 +42,7 @@ export default class DisplayReviewListItem extends Component {
                                 </div>
 
                                 <div className="runButtonContainer">
-                                    <form action="/runSentimentAnalysis" method="post">
+                                    <form action="/runSingleSentimentAnalysis" method="post">
                                         <input type="text"
                                                name="reviewId"
                                                value={data.reviewId}
@@ -55,7 +55,7 @@ export default class DisplayReviewListItem extends Component {
                                                hidden={true}
                                         />
 
-                                        <input className="runButton"
+                                        <input className="button runButton"
                                                type="submit"
                                                value="Run"
                                                onClick={(event) => this.handleClick(event, data.reviewId)}

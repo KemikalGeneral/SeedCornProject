@@ -3,48 +3,37 @@
     text-align: left;
 }
 
-.FAB {
-    background: white;
-    border: 1px solid limegreen;
-    border-radius: 8px;
-    color: limegreen;
-    padding: 8px;
-    position: relative;
-    text-decoration: none;
-    transition: 0.25s;
-    width: auto;
-}
-
-.FAB:hover {
-    background: limegreen;
-    color: white;
-}
-
-/***** ***** Forms ***** *****/
-input {
+.searchInput {
     border: 1px solid lightgrey;
     border-radius: 8px;
     margin-right: 8px;
     padding: 8px;
-    transition: 0.25s;
 }
 
-input:focus {
+.searchInput:focus{
     outline: none;
 }
 
-input::placeholder{
+.searchInput::placeholder{
     color: lightgrey;
 }
 
-input[type="submit"] {
+.button {
     background: white;
     border: 1px solid lightgrey;
+    border-radius: 8px;
     color: limegreen;
-    margin-right: 0;
+    margin-right: 8px;
+    padding: 8px;
+    text-decoration: none;
+    transition: 0.25s;
 }
 
-input[type="submit"]:hover {
+.button:focus {
+    outline: none;
+}
+
+.button:hover {
     background: limegreen;
     border: 1px solid limegreen;
     box-shadow: 0 4px 8px grey;
@@ -52,6 +41,17 @@ input[type="submit"]:hover {
     transform: translateY(-2.5px);
 }
 
-input[type="date"] {
-    padding: 5px;
+.disabled {
+    background: white;
+    border: 1px solid lightgrey;
+    border-radius: 8px;
+    color: red;
+    margin-right: 8px;
+    padding: 8px;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+.disabled:hover {
+    cursor: not-allowed;
 }

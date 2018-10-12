@@ -3,8 +3,9 @@ import './displayAppListItemStyles.css';
 
 export default class DisplayAppListItem extends Component {
 
-    handleClick = (event, name) => {
-        this.props.callbackFromParent(name);
+    handleClick = (appName) => {
+        this.props.callbackFromParent(appName.target.value);
+        console.log('data: ', appName.target.value);
     };
 
     render() {
@@ -20,7 +21,7 @@ export default class DisplayAppListItem extends Component {
                                     <input type="submit"
                                            value={data}
                                            name="getReviewsFromAppName"
-                                           onClick={(event) => this.handleClick(event, data.app_name)}
+                                           onClick={(appName) => this.handleClick(appName)}
                                     />
                                 </form>
 
