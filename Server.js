@@ -194,24 +194,23 @@ app.post('/runBatchSentimentAnalysis', (req, res) => {
     console.log('==================== /runBatchSentimentAnalysis ====================');
 
     let allReviews = [];
-    let singleReview = [];
 
     for (let review of reviewsFromAppName) {
-
-        singleReview.push(review.reviewId.toString());
-        singleReview.push(review.reviewText);
-
-        allReviews.push(singleReview);
-
-        // const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', review.reviewText]);
-
-        // exec.stdout.on('data', function (data) {
-        //     dbHelper.addSentimentResult(data.toString(), review.reviewId);
-        // });
-
+        allReviews.push(review.reviewId.toString());
+        allReviews.push(review.reviewText);
     }
-    console.log('reviews: ', reviewsFromAppName);
+    // console.log('allReviews: ', allReviews);
 
+    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', allReviews]);
+
+    exec.stdout.on('data', function (data) {
+        console.log('data: ', data.toString());
+        // dbHelper.addSentimentResult(data.toString(), review.reviewId);
+
+        for (let x of data) {
+            console.log('x: ', x.toString());
+        }
+    });
 
     res.redirect('/displayPage');
 });
