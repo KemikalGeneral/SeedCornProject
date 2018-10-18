@@ -193,23 +193,33 @@ app.post('/runSingleSentimentAnalysis', (req, res) => {
 app.post('/runBatchSentimentAnalysis', (req, res) => {
     console.log('==================== /runBatchSentimentAnalysis ====================');
 
-    let allReviews = [];
+    const delimiter = '!#delimiter#!';
+    const reviewDelimiter = '!#reviewDelimiter#!';
+    let allReviews = '';
 
     for (let review of reviewsFromAppName) {
-        allReviews.push(review.reviewId.toString());
-        allReviews.push(review.reviewText);
+        allReviews += review.reviewId;
+        allReviews += delimiter;
+        allReviews += review.reviewText;
+        allReviews += delimiter;
     }
-    // console.log('allReviews: ', allReviews);
 
     const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', allReviews]);
 
     exec.stdout.on('data', function (data) {
-        console.log('data: ', data.toString());
-        // dbHelper.addSentimentResult(data.toString(), review.reviewId);
 
-        for (let x of data) {
-            console.log('x: ', x.toString());
+        // Split the string into reviews.
+        let reviews = data.toString().split(reviewDelimiter);
+        for (let review of reviews) {
+
+            // Split each review into its elements for saving.
+            let splitReviews = review.split(delimiter);
+            for (let element of splitReviews) {
+                console.log('element: ', element);
+            }
         }
+
+        // dbHelper.addSentimentResult(data.toString(), review.reviewId);
     });
 
     res.redirect('/displayPage');
