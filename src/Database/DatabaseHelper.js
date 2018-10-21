@@ -17,8 +17,8 @@ class DatabaseHelper {
      */
     constructor() {
         console.log('Database constructor');
-        // db = new sqlite3.Database(':memory:', (err) => {
-        db = new sqlite3.Database('./src/Database/schema.db', (err) => {
+        db = new sqlite3.Database(':memory:', (err) => {
+        // db = new sqlite3.Database('./src/Database/schema.db', (err) => {
             console.log('\n========== CREATE ==========');
             if (err) {
                 return console.error(err.message);
@@ -95,25 +95,6 @@ class DatabaseHelper {
     }
 
     /**
-     * FindOne - Finds the app and review data for a single app.
-     * Currently hardcoded to app_id = 1 for testing, but will take a user-defined parameter.
-     */
-    findOne() {
-        // this.open();
-        db.each(`SELECT *
-                 FROM app
-                        join review on app.App_id = review.app_id
-                 where app.app_id = 1`, (err, row) => {
-            console.log('\n========== FindOne ==========');
-            // console.log('Row: ', row);
-            if (err) {
-                throw err;
-            }
-        });
-        // this.close();
-    };
-
-    /**
      * GetListOfAppNames - Returns a list of the names of apps stored in the database.
      * Uses a 'complete' callback to pass back the names data.
      * @param callback
@@ -155,14 +136,13 @@ class DatabaseHelper {
 
     /**
      * AddSentimentResult - updates the review table with the sentiment analysis score for the give review ID.
-     * @param reviewSentiment
-     * @param reviewId
+     * @param reviewIdAndScore
      */
-    addSentimentResult(reviewSentiment, reviewId) {
+    addSentimentResult(reviewIdAndScore) {
         console.log('\n========== addSentimentResult ==========');
         db.run(`UPDATE review
                 SET review_sentiment = ?
-                WHERE review_id = (?)`, [reviewSentiment, reviewId], function (err) {
+                WHERE review_id = (?)`, [reviewIdAndScore[1], reviewIdAndScore[0]], function (err) {
             if (err) {
                 return console.error(err.message);
             }

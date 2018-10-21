@@ -166,37 +166,79 @@ app.post('/getReviewsFromAppName', (req, res) => {
 });
 
 /**
- * Take the reviewId and the reviewText from the incoming body.
- * Use the reviewText to send to the sentiment analyser,
- * and use the reviewId to save the sentiment result to the selected review.
+ * Take the reviewId and the reviewText from the incoming body, and create a review (as a single string,
+ * separated by a delimiter).
+ * Use the review data to send to the sentiment analyser.
+ * Process the data coming back and save the ID and average score.
  */
 app.post('/runSingleSentimentAnalysis', (req, res) => {
     console.log('==================== /runSingleSentimentAnalysis ====================');
 
-    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', req.body.reviewText]);
-    exec.stdout.on('data', function (data) {
+    const delimiter = '!#delimiter#!';
+    const reviewDelimiter = '!#reviewDelimiter#!';
+    const reviewId = req.body.reviewId;
+    const reviewText = req.body.reviewText;
 
-        console.log('data: ', data.toString());
+    // Build review string to analyse.
+    let review = '';
+    review += reviewId;
+    review += delimiter;
+    review += reviewText;
+    review += delimiter;
+
+    // Feed the NLP Jar the single review string and process the returning data.
+    const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', review]);
+    exec.stdout.on('data', function (data) {
         if (data.toString() === '') {
             console.log('no data: ');
         }
 
-        // dbHelper.addSentimentResult(data.toString(), req.body.reviewId);
+        // Split the data string into reviews.
+        let reviews = data.toString().split(reviewDelimiter);
+        for (let review of reviews) {
 
-        console.log('score: ', req.body.reviewText, ' ', data.toString());
+            // Split each review into its elements for saving.
+            let splitReviews = review.split(delimiter);
 
+            // Iterate through the splitReviews array adding the ID and average score to the reviewIdAndScore array.
+            // Pass the reviewIdAndScore array through to the addSentimentResult DB method for saving.
+            let reviewIdAndScore = [];
+            const splitReviewsLength = splitReviews.length;
+            for (let i = 0; i < splitReviewsLength; i++) {
+                const currentReview = splitReviews[i];
+
+                if (currentReview.trim().length !== 0) {
+                    if (i === 0) {
+                        reviewIdAndScore.push(currentReview);
+                    } else if (i === 1) {
+                        reviewIdAndScore.push(parseFloat(currentReview).toFixed(2));
+                    }
+                }
+
+                if (i === splitReviewsLength - 1) {
+                    dbHelper.addSentimentResult(reviewIdAndScore);
+                }
+            }
+        }
     });
 
     res.redirect('/displayPage');
 });
 
+/**
+ * Take the reviewId and the reviewText from the incoming body, and create a single string containing all reviews
+ * (as a single string, separated by a delimiter).
+ * Use the review data to send to the sentiment analyser.
+ * Process the data coming back and save the IDs and average scores.
+ */
 app.post('/runBatchSentimentAnalysis', (req, res) => {
     console.log('==================== /runBatchSentimentAnalysis ====================');
 
     const delimiter = '!#delimiter#!';
     const reviewDelimiter = '!#reviewDelimiter#!';
-    let allReviews = '';
 
+    // Build allReviews string to analyse.
+    let allReviews = '';
     for (let review of reviewsFromAppName) {
         allReviews += review.reviewId;
         allReviews += delimiter;
@@ -204,8 +246,8 @@ app.post('/runBatchSentimentAnalysis', (req, res) => {
         allReviews += delimiter;
     }
 
+    // Feed the NLP Jar the single review string and process the returning data.
     const exec = require('child_process').spawn('java', ['-jar', './StanfordNlp.jar', allReviews]);
-
     exec.stdout.on('data', function (data) {
 
         // Split the string into reviews.
@@ -214,12 +256,43 @@ app.post('/runBatchSentimentAnalysis', (req, res) => {
 
             // Split each review into its elements for saving.
             let splitReviews = review.split(delimiter);
-            for (let element of splitReviews) {
-                console.log('element: ', element);
+            let reviewId = '';
+            let reviewSentence = '';
+            let reviewScore = '';
+            let averageScore = 0;
+
+            // Iterate through the splitReviews array adding the ID and average score to the reviewIdAndScore array.
+            // Pass the reviewIdAndScore array through to the addSentimentResult DB method for saving each review.
+            let reviewIdAndScore = [];
+            const splitReviewsLength = splitReviews.length;
+            for (let i = 0; i < splitReviewsLength; i++) {
+                const currentReview = splitReviews[i];
+
+                if (currentReview.trim().length !== 0) {
+                    if (i === 0) {
+                        reviewIdAndScore.push(currentReview);
+                        // reviewId = currentReview;
+                        // console.log('reviewId: ', reviewId);
+                    } else if (i === 1) {
+                        reviewIdAndScore.push(parseFloat(currentReview).toFixed(2));
+                        // averageScore = currentReview;
+                        // console.log('averageScore: ', averageScore);
+                    } else if ((i & 1) === 0) {
+                        // reviewSentence = currentReview;
+                        // console.log('reviewSentence: ', reviewSentence);
+                    } else if ((i & 1) !== 0) {
+                        // reviewScore = currentReview;
+                        //
+                        // console.log('id: ', reviewId);
+                        // console.log('score: ', reviewScore);
+                    }
+                }
+
+                if (i === splitReviewsLength - 1) {
+                    dbHelper.addSentimentResult(reviewIdAndScore);
+                }
             }
         }
-
-        // dbHelper.addSentimentResult(data.toString(), review.reviewId);
     });
 
     res.redirect('/displayPage');
